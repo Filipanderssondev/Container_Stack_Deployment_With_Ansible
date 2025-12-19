@@ -37,11 +37,45 @@ The goal of this project is to build a complete IT-environment and gain a deeper
 <br>
 <br>
 
-## Method
+## 3. Method
 
-### - Preparation
+### 3.1 Preparation 
 - We have our earlier projects as a foundation, [a Server running Proxmox](https://github.com/rafaelurrutiasilva/Proxmox_on_Nuc/tree/) and proxmox running [three replicated virtual machines from a Rocky Linux OS base](https://github.com/Filipanderssondev/Rocky_Linux_OS_Base_for_VMs) and [Ansible configuration on the management vm](https://github.com/JonatanHogild/Ansible_on_management_vm)
-- We did our own separate processes at first, practicing on our local laptops with ansible an Podman for example
+
+### 3.2 Pre-experimention
+
+- Before applying the same methods to the VM, we start by experimenting locally with diffrent parts of the project, in this perticular case i started experimenting on my own using nginx as an image and nginx-prometheus-exporter 
+
+1. I start with reading company policy for the use of public images, i pull the images from dockerhub, scan them and make them okay for internal use
+   
+2. afterward, i compose a compose.yaml file to:
+
+~~~yaml
+version: "3.8"
+services:
+  image: "example.com/nginx:1.27-alpine"
+    container_name: nginx_container
+    ports:
+      - "8080:8080"
+    volumes:
+      - /folder/folder/nginx.conf:/folder/nginx/conf.d/default.conf:Z
+
+  nginx-prometheus-exporter:
+    image: "example.com/nginx-prometheus-exporter:latest"
+    container_name: nginx-prometheus-exporter_container
+    ports:
+        - "9113:9113"
+    command: ["--nginx.scrape-uri", "http://nginx:8080/status"]
+~~~
+  
+### 3.3 Installation & Configuration on VM
+N/A
+
+#### 3.3.1 Installing Podman on the Application VM with Ansible
+N/A
+
+#### 3.3.2 Deploying the application with compose.yaml
+N/A
 
 ## 4. Target Audience
 - This repo is for anyone who wants a step-by-step guide on .
@@ -54,10 +88,15 @@ This repo is also part of a larger project aimed at people interested in learnin
 
 ## Disclaimer
 > [!CAUTION]
-> This is intended for learning, testing, and experimentation. The emphasis is not on security or creating an operational environment suitable for production.
+> This is intended for learning, testing, and experimentation. The emphasis is not on security or creating an operational environment suitable for production. 
 
 ## Scope and Limitations
-Omfattning och begränsningar
+
+### Scope
+- The scope is inteded to serve as an internship project and learning oppertunity when it comes to working with containers, and to run applications on our virtual machines with redundance
+
+### Limitations
+- Naturally we have strict limitations for what we can specify and not. We only specfify public information and our general approach.
 
 ## Environment
 - [See our foundation from earlier projects](###Our-other-projects)
@@ -68,7 +107,7 @@ Great thanks once again to our mentor [Rafael](https://github.com/rafaelurrutias
 ## References
 - [Dockerhub (public image repository](https://hub.docker.com/)
 
-  ### Our other projects
+### Our other projects
 1. [Proxmox_on_Nuc](https://github.com/rafaelurrutiasilva/Proxmox_on_Nuc)
 2. [Rocky_Linux_OS_Base_for_VMs](https://github.com/Filipanderssondev/Rocky_Linux_OS_Base_for_VMs)
 3. [Ansible_on_management_vm](https://github.com/JonatanHogild/Ansible_on_management_vm)
