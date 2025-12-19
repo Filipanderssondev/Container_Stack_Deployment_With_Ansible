@@ -1,15 +1,15 @@
 # Podman Compose app on virtual machines 
 <img width="100" alt="MyLogo" src="https://github.com/rafaelurrutiasilva/images/blob/main/logos/MyLogo_2.png" align=left><br>
 <br>
-**Podman Compose on virtual machines **<br>
+**Podman Compose on virtual machines**<br>
 <br>**Authors:** _<a href="https://github.com/Filipanderssondev">Filip Andersson</a> and <a href="https://github.com/JonatanHogild">Jonatan Högild</a>_<br>
 Publiceringsdatum<br>
 
 <br>
 
 ## Abstract
-First project <a href="https://github.com/rafaelurrutiasilva/Proxmox_on_Nuc/blob/main/Extra/Mermaid/Projects.md">in a series of projects</a> during our internship at **The Swedish Meteorological and Hydrological Institute** [(SMHI)](https://www.smhi.se/en/about-smhi), Installation of Proxmox on an Asus PN64 ax210NGW (NUC/Mini-PC). <br>
-<br> -->
+Fourth project <a href="https://github.com/rafaelurrutiasilva/Proxmox_on_Nuc/blob/main/Extra/Mermaid/Projects.md">in a series of projects</a> during our internship at **The Swedish Meteorological and Hydrological Institute** [(SMHI)](https://www.smhi.se/en/about-smhi), Deploying an application with podman compose on an application vm we created. <br>
+<br>
 
 ## Table of Contents
 
@@ -26,8 +26,8 @@ First project <a href="https://github.com/rafaelurrutiasilva/Proxmox_on_Nuc/blob
 11. [Conclusion](#conclusion)
 
 ## 1. Introduction<br>
-**Greetings!**
-_...and welcome to our project. This project is a the first project <a href="https://github.com/rafaelurrutiasilva/Proxmox_on_Nuc/blob/main/Extra/Mermaid/Projects.md">in a series of projects</a> with the end goal of setting up a complete virtualized, automated, and monitored IT-Enviroment as a part of our internship on [The Swedish Meteorological and Hydrological Institute (SMHI)](https://www.smhi.se/en/about-smhi) IT-department at the headquarters in Norrköping. The second goal of these projects are also supposed to serve as a set-up guide here on Github for anyone and everyone that wants to follow along! we will link every project to each other aswell._<br>
+**Welcome friend!**
+_...to our fourth project <a href="https://github.com/rafaelurrutiasilva/Proxmox_on_Nuc/blob/main/Extra/Mermaid/Projects.md">in a series of projects</a> with the end goal of setting up a complete virtualized, automated, and monitored IT-Enviroment as a part of our internship on [The Swedish Meteorological and Hydrological Institute (SMHI)](https://www.smhi.se/en/about-smhi) IT-department at the headquarters in Norrköping. The second goal of these projects are also supposed to serve as a set-up guide here on Github for anyone and everyone that wants to replicate what we have done. we will link every project to each other aswell._<br>
 
 **<a href="https://github.com/Filipanderssondev">Filip Andersson</a> and <a href="https://github.com/JonatanHogild">Jonatan Högild</a>**
 
@@ -49,13 +49,10 @@ This repo is also part of a larger project aimed at people interested in learnin
 <br><br>
 
 ## Document Status
-Dokumentstatus (om det finns relevant information om dokumentets status, till exempel utkast, slutfört, etc.). Tex:
 > [!NOTE]  
-> My work here is not finished yet. I need, among other things, to supplement with instructions on how each component should be configured to work together as well supplement with an overview image that explains how the whole thing works.
-
+> This is an ongoing work right now
 
 ## Disclaimer
-Ansvarsfriskrivning. Tex:
 > [!CAUTION]
 > This is intended for learning, testing, and experimentation. The emphasis is not on security or creating an operational environment suitable for production.
 
@@ -63,14 +60,19 @@ Ansvarsfriskrivning. Tex:
 Omfattning och begränsningar
 
 ## Environment
-Miljö som användes
+- [See our foundation from earlier projects](###Our-other-projects)
 
 ## Acknowledgments
-Tack och erkännanden. Tex:
-Big thanks to all the people involved in the material I refer to in my links! I would also like to express gratitude to everyone out there, including my colleagues and friends, who are creating things that help and inspire us to continue learning and exploring this never-ending world of computer technology.
+Great thanks once again to our mentor Rafael and [Victor](https://github.com/ludd98) for helping with 
 
 ## References
-Referenser (om det behövs)
+- [Dockerhub (public image repository](https://hub.docker.com/)
+
+### Our other projects
+1. [Proxmox_on_Nuc](https://github.com/rafaelurrutiasilva/Proxmox_on_Nuc)
+2. [Rocky_Linux_OS_Base_for_VMs](https://github.com/Filipanderssondev/Rocky_Linux_OS_Base_for_VMs)
+3. [Ansible_on_management_vm](https://github.com/JonatanHogild/Ansible_on_management_vm)
+4. [Podman_Compose_app_on_VMs](https://github.com/Filipanderssondev/Podman_Compose_app_on_VMs)
 
 ## Conclusion
 Slutsats
