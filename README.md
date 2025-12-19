@@ -63,12 +63,12 @@ Omfattning och begränsningar
 - [See our foundation from earlier projects](###Our-other-projects)
 
 ## Acknowledgments
-Great thanks once again to our mentor Rafael and [Victor](https://github.com/ludd98) for helping with 
+Great thanks once again to our mentor [Rafael](https://github.com/rafaelurrutiasilva) and [Victor](https://github.com/ludd98) for helping with 
 
 ## References
 - [Dockerhub (public image repository](https://hub.docker.com/)
 
-### Our other projects
+  ### Our other projects
 1. [Proxmox_on_Nuc](https://github.com/rafaelurrutiasilva/Proxmox_on_Nuc)
 2. [Rocky_Linux_OS_Base_for_VMs](https://github.com/Filipanderssondev/Rocky_Linux_OS_Base_for_VMs)
 3. [Ansible_on_management_vm](https://github.com/JonatanHogild/Ansible_on_management_vm)
