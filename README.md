@@ -76,6 +76,8 @@ N/A
 
 #### 3.3.2 Deploying the application with compose.yaml
 N/A
+draft:
+We discovered that since ansible is configured to run as root, the images i pulled with my ansible playbooks and the containers i run with ansible playbooks only show up when typing sudo podman images / sudo podman ps.
 
 ## 4. Target Audience
 - This repo is for anyone who wants a step-by-step guide on .
