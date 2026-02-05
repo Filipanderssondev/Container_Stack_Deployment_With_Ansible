@@ -157,26 +157,18 @@ ansible/roles/containers/images/pull/tasks/main.yaml
 ~~~yaml
 ---
 - name: Pull images
-  block:
-
-    - name: Build full image name
-      ansible.builtin.set_fact:
-        full_image_name: >-
-          {{
-            default_registry
-            + '/'
-            + (item.manufacturer ~ '/' if item.manufacturer is defined else '')
-            + item.image_name
-            + ':'
-            + (item.tag | default(default_tag))
-          }}
-
-    - name: Pull image
-      containers.podman.podman_image:
-        name: "{{ full_image_name }}"
-        state: present
-        tlsverify: "{{ tlsverify }}"
-
+  containers.podman.podman_image:
+    name: >-
+      {{
+        default_registry
+        + '/'
+	+ (item.manufacturer ~ '/' if item.manufacturer is defined else '')
+        + item.image_name
+        + ':'
+	+ (item.tag | default(default_tag))
+      }}
+    state: present
+    tlsverify: "{{ tlsverify }}"
   loop: "{{ images_to_pull }}"
 ~~~
 
