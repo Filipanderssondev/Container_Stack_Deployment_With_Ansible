@@ -37,16 +37,16 @@ The goals and objectives of this project is:
 - Collect metrics from that app to the metrics VM, displaying it in Grafana.
 - Doing it all through Ansible on the management VM
 <br>
-<br>
 
 ## 3. Method
 
 ### 3.1 Preparation 
 - We have our earlier projects as a foundation, [a Server running Proxmox](https://github.com/rafaelurrutiasilva/Proxmox_on_Nuc/tree/) and proxmox running [three replicated virtual machines from a Rocky Linux OS base](https://github.com/Filipanderssondev/Rocky_Linux_OS_Base_for_VMs) and [Ansible configuration on the management vm](https://github.com/JonatanHogild/Ansible_on_management_vm)
 
+<!--
 ### 3.2 Pre-experimention
 
-- Before applying the same methods to the VM, we start by experimenting locally with diffrent parts of the project, in this perticular case i started experimenting on my own using nginx as an image and nginx-prometheus-exporter 
+- Before applying the same methods to the VM, i start by experimenting locally with diffrent parts of the project, in this perticular case i started experimenting on my own using nginx as an image and nginx-prometheus-exporter 
 
 1. I start with reading company policy for the use of public images, i pull the images from dockerhub, scan them and make them okay for internal use
    
@@ -69,12 +69,59 @@ services:
         - "9113:9113"
     command: ["--nginx.scrape-uri", "http://nginx:8080/status"]
 ~~~
-  
-### 3.3 Installation & Configuration on VM
-N/A
+-->
 
-#### 3.3.1 Installing Podman on the Application VM with Ansible
-N/A
+### 3.3 Ansible Roles configuration on Management VM
+Assuming you read the project of how to configure Ansible im gonna dive into this right away. 
+SMHI has strict policies naturally of what can and cant be disclosed. I will speak in general terms. 
+
+- I will need a role for logging into the private registry and reffering to my credentials in the encrypted vault file. The image registry i will pull from is a private registry
+- I will need a role for checking that enviroment tools like podman exists 
+- I will need a role who pulls images, run applications.
+
+My project structuer will look something like this:
+
+~~~yaml
+ansible/roles
+├── containers
+│   ├── images
+│   │   ├── build
+│   │   │   └── main.yaml
+│   │   └── pull
+│   │       ├── defaults
+│   │       │   └── main.yaml
+│   │       └── tasks
+│   │           └── main.yaml
+│   ├── install
+│   │   └── tasks
+│   │       └── main.yaml
+│   ├── login
+│   │   ├── filip
+│   │   │   ├── defaults
+│   │   │   │   └── main.yaml
+│   │   │   └── tasks
+│   │   │       └── main.yaml
+│   │   └── jonatan
+│   └── run
+│       ├── defaults
+│       │   └── main.yaml
+│       └── tasks
+│           └── main.yaml
+├── applications
+│   ├── app
+│   │   ├── backend
+│   │   ├── db
+│   │   ├── frontend
+│   │   └── run
+│   │       ├── defaults
+│   │       │   └── main.yaml
+│   │       └── tasks
+│   │           └── main.yaml
+│   └── monitoring
+│       └── run
+│           ├── defaults
+│           └── tasks
+~~~
 
 #### 3.3.2 Deploying the application with compose.yaml
 N/A
