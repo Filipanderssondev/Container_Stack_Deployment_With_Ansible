@@ -16,14 +16,14 @@ Container stack / application Deployment on virtual machines running Podman, thr
 1. [Introduction](#introduction)
 2. [Goals and Objectives](#goals-and-objectives)
 3. [Method](#method)
-4. [Target Audience](#target-audience)
-5. [Document Status](#document-status)
-6. [Disclaimer](#disclaimer)
-7. [Scope and Limitations](#scope-and-limitations)
-8. [Environment](#environment)
-9. [Acknowledgments](#acknowledgments)
-10. [References](#references)
-11. [Conclusion](#conclusion)
+5. [Target Audience](#target-audience)
+6. [Document Status](#document-status)
+7. [Disclaimer](#disclaimer)
+8. [Scope and Limitations](#scope-and-limitations)
+9. [Environment](#environment)
+10. [Acknowledgments](#acknowledgments)
+11. [References](#references)
+12. [Conclusion](#conclusion)
 <br>
 
 ## 1. Introduction<br>
@@ -43,44 +43,38 @@ The goals and objectives of this project is:
 
 ## 3. Method
 
-Some details cant be disclosed because of strict company policy so i will speak in general terms. For example the registry i will pull images from i will call "private-registry.com/repository" 
+As i described in the beginning im going run a container stack / application on the application vm, monitor that application and display the metrics on the metrics vm. I will manage everything through our control vm called Management through Ansible, using roles in playbooks.
+
+  **For the container stack i will run:**
+  - NGINX as frontend, displaying basic HTML/CSS
+  - Postgres as a database
+  - Python as backend
+ 
+  **For monitoring i will run:**
+  - Prometheus
+  - Grafana
+  - Node-exporter on all vms as exporter
+
+Management VM:
+ - Ansible roles
+ - Ansible Playbooks
+
+Application VM
+ - Running Podman as runtime enviroment
+ - Running the application
+
+- Note, that some details cant be disclosed due to company policy and that i will speak in general terms. For example the registry i will pull images from i will call _"private-registry.com/repository"_
+
 
 ### 3.1 Preparation 
 - We have our earlier projects as a foundation, [a Server running Proxmox](https://github.com/rafaelurrutiasilva/Proxmox_on_Nuc/tree/) and proxmox running [three replicated virtual machines from a Rocky Linux OS base](https://github.com/Filipanderssondev/Rocky_Linux_OS_Base_for_VMs) and [Ansible configuration on the management vm](https://github.com/JonatanHogild/Ansible_on_management_vm)
 
-<!--
-### 3.2 Pre-experimention
-
-- Before applying the same methods to the VM, i start by experimenting locally with diffrent parts of the project, in this perticular case i started experimenting on my own using nginx as an image and nginx-prometheus-exporter 
-
-1. I start with reading company policy for the use of public images, i pull the images from dockerhub, scan them and make them okay for internal use
-   
-2. afterward, i compose a compose.yaml file to:
-
-~~~yaml
-version: "3.8"
-services:
-  image: "example.com/nginx:1.27-alpine"
-    container_name: nginx_container
-    ports:
-      - "8080:8080"
-    volumes:
-      - /folder/folder/nginx.conf:/folder/nginx/conf.d/default.conf:Z
-
-  nginx-prometheus-exporter:
-    image: "example.com/nginx-prometheus-exporter:latest"
-    container_name: nginx-prometheus-exporter_container
-    ports:
-        - "9113:9113"
-    command: ["--nginx.scrape-uri", "http://nginx:8080/status"]
-~~~
--->
 <br>
 
 ### 3.2 Ansible Roles configuration on Management VM
-Assuming you read the project of how to configure Ansible im gonna dive into this right away. For each role, i will create a deafults/main.yaml and a tasks/main.yaml as is the standard to have a defaults as fallback and a tasks/main.yaml to descrive how things will be executed, and in playbooks what will be executed. I choose to create reusable roles as it is less repetative then writing tasks in playbooks.
+For each role, i will create a deafults/main.yaml and a tasks/main.yaml as is the standard to have a defaults as fallback and a tasks/main.yaml to descrive how things will be executed, and in playbooks what will be executed. I choose to create reusable roles as it is less repetative then writing tasks in playbooks.
 
-- I will need a role for logging into the private registry and reffering to my credentials in the encrypted vault file. The image registry i will pull from is a private registry
+- I will need a role for logging into the private registry
 - I will need a role for checking that enviroment tools like podman exists 
 - I will need a role who pulls images, run applications.
 
