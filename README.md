@@ -33,9 +33,9 @@ _...to this project where i am going to do some container deployment through inf
 
 ## 2. Goals and Objectives
 The goals and objectives of this project is: 
-- 1. To run an application on the application VM, hosting it on port 8080
-  2. Collect metrics from that app to the metrics VM, displaying it in Grafana.
-  3. Doing it all through Ansible on the management VM
+- To run an application on the application VM, hosting it on port 8080
+- Collect metrics from that app to the metrics VM, displaying it in Grafana.
+- Doing it all through Ansible on the management VM
 <br>
 <br>
 
