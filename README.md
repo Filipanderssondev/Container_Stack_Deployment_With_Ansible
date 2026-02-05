@@ -134,6 +134,27 @@ ansible/roles
 
 <br>
 
+#### 3.2.3 image Pull role
+
+~~~yaml
+---
+default_registry: "private-registry.com/repository"
+
+#image basics
+image_name: ""
+tag: "latest"
+tlsverify: false
+
+#manufacturer if needed like prom/prometheus:latest
+manufacturer: ""
+
+images_to_pull:[]
+~~~
+
+<br>
+
+
+
 #### 3.2.3 Application roles
 
 <br>
