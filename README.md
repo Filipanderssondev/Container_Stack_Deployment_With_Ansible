@@ -43,6 +43,8 @@ The goals and objectives of this project is:
 
 ## 3. Method
 
+Some details cant be disclosed because of strict company policy so i will speak in general terms. For example the registry i will pull images from i will call "private-registry.com/repository" 
+
 ### 3.1 Preparation 
 - We have our earlier projects as a foundation, [a Server running Proxmox](https://github.com/rafaelurrutiasilva/Proxmox_on_Nuc/tree/) and proxmox running [three replicated virtual machines from a Rocky Linux OS base](https://github.com/Filipanderssondev/Rocky_Linux_OS_Base_for_VMs) and [Ansible configuration on the management vm](https://github.com/JonatanHogild/Ansible_on_management_vm)
 
@@ -76,8 +78,7 @@ services:
 <br>
 
 ### 3.2 Ansible Roles configuration on Management VM
-Assuming you read the project of how to configure Ansible im gonna dive into this right away. 
-SMHI has strict policies naturally of what can and cant be disclosed. I will speak in general terms. 
+Assuming you read the project of how to configure Ansible im gonna dive into this right away. For each role, i will create a deafults/main.yaml and a tasks/main.yaml as is the standard to have a defaults as fallback and a tasks/main.yaml to descrive how things will be executed, and in playbooks what will be executed. I choose to create reusable roles as it is less repetative then writing tasks in playbooks.
 
 - I will need a role for logging into the private registry and reffering to my credentials in the encrypted vault file. The image registry i will pull from is a private registry
 - I will need a role for checking that enviroment tools like podman exists 
@@ -89,8 +90,6 @@ My project structuer will look something like this:
 ansible/roles
 ├── containers
 │   ├── images
-│   │   ├── build
-│   │   │   └── main.yaml
 │   │   └── pull
 │   │       ├── defaults
 │   │       │   └── main.yaml
@@ -144,7 +143,7 @@ N/A
 draft:
 
 ##### Debug
-- We discovered that since ansible was configured earlier to run as root, To list the images and containers running i need to run as root on the app vm.
+N/A
 
 <br>
 
