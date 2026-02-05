@@ -24,12 +24,15 @@ Container stack / application Deployment on virtual machines running Podman, thr
 9. [Acknowledgments](#acknowledgments)
 10. [References](#references)
 11. [Conclusion](#conclusion)
+<br>
 
 ## 1. Introduction<br>
 **Welcome friend!**
 _...to this project where i am going to do some container deployment through infrastructure-as-code (IaC) with Ansible. Im going to deploy an application / stack of containers on two worker VMs, the application VM will serve as our runtime enviroment and the metrics VM serving as our metrics collector / Monitoring for that app, running Prometheus and Grafana. I will run everything on the VM called management, that will serve as our control VM running Ansible. I will do this by configuring Ansible Roles, and using those ansible roles in playbooks. This is our fourth project <a href="https://github.com/rafaelurrutiasilva/Proxmox_on_Nuc/blob/main/Extra/Mermaid/Projects.md">in a series of projects</a> with the end goal of setting up a complete virtualized, automated, and monitored IT-Enviroment as a part of our internship on [The Swedish Meteorological and Hydrological Institute (SMHI)](https://www.smhi.se/en/about-smhi) IT-department at the headquarters in Norrköping. The second goal of these projects are also supposed to serve as a set-up guide here on Github for anyone and everyone that wants to replicate what we have done. we will link every project to each other aswell._<br>
 
 **<a href="https://github.com/Filipanderssondev">Filip Andersson</a> and <a href="https://github.com/JonatanHogild">Jonatan Högild</a>**
+<br>
+<br>
 
 ## 2. Goals and Objectives
 The goals and objectives of this project is: 
@@ -70,8 +73,9 @@ services:
     command: ["--nginx.scrape-uri", "http://nginx:8080/status"]
 ~~~
 -->
+<br>
 
-### 3.3 Ansible Roles configuration on Management VM
+### 3.2 Ansible Roles configuration on Management VM
 Assuming you read the project of how to configure Ansible im gonna dive into this right away. 
 SMHI has strict policies naturally of what can and cant be disclosed. I will speak in general terms. 
 
@@ -80,7 +84,7 @@ SMHI has strict policies naturally of what can and cant be disclosed. I will spe
 - I will need a role who pulls images, run applications.
 
 My project structuer will look something like this:
-
+<br>
 ~~~yaml
 ansible/roles
 ├── containers
@@ -123,10 +127,26 @@ ansible/roles
 │           └── tasks
 ~~~
 
-#### 3.3.2 Deploying the application with compose.yaml
+#### 3.2.1 Log in Role
+
+<br>
+
+#### 3.2.2 Installation role
+
+<br>
+
+#### 3.2.3 Application roles
+
+<br>
+
+#### 3.2 Deploying the application
 N/A
 draft:
-We discovered that since ansible is configured to run as root, the images i pulled with my ansible playbooks and the containers i run with ansible playbooks only show up when typing sudo podman images / sudo podman ps.
+
+##### Debug
+- We discovered that since ansible was configured earlier to run as root, To list the images and containers running i need to run as root on the app vm.
+
+<br>
 
 ## 4. Target Audience
 - This repo is for anyone who wants a step-by-step guide on .
