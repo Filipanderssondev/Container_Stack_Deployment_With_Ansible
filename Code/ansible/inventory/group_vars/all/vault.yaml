@@ -1,0 +1,5 @@
+# Dummy values for project demostration / for best practice demostration
+# In roles/containers/login/tasks/main i reference these variables and usually vault files are encrypted.
+
+registry-username: example-for-show
+registry-password: example-for-show
