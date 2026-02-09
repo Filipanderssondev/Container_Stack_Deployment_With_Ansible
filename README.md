@@ -1,5 +1,5 @@
 # Container Stack Deployment With Ansible 
-<img width="100" alt="MyLogo" src="https://github.com/rafaelurrutiasilva/images/blob/main/logos/MyLogo_2.png" align=left><br>
+<img width="400" src="https://github.com/Filipanderssondev/Container_Stack_Deployment_With_Ansible/blob/main/Extra/i-love-the-smell-of-containers-in-the-morning.jpg" align=left><br>
 <br>
 **Container Stack Deployment With Ansible**<br>
 <br>**Authors:** _<a href="https://github.com/Filipanderssondev">Filip Andersson</a> and <a href="https://github.com/JonatanHogild">Jonatan Högild</a>_<br>
