@@ -1,15 +1,14 @@
 ---
-#The pull mechanics to reuse in playbooks
 - name: Pull container images
   containers.podman.podman_image:
     name: >-
       {{
         default_registry
         ~ '/'
-	      ~ (item.get('manufacturer', '') ~ '/' if item.get('ma>
+        ~ (item.get('manufacturer', '') ~ '/' if item.get('manufacturer', '') != '' else '')
         ~ item.image_name
         ~ ':'
-	      ~ (item.get('tag', default_tag))
+        ~ (item.get('tag', default_tag))
       }}
     state: present
     tlsverify: "{{ tlsverify }}"
