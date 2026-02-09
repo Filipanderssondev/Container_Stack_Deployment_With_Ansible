@@ -40,6 +40,7 @@ The goals and objectives of this project is:
 - To run an application on the application VM, hosting it on port 8080
 - Collect metrics from that app to the metrics VM, displaying it in Grafana.
 - Doing it all through Ansible on the management VM
+<br>
 
 ### 2.1 Structure
 As i described in the beginning im going run a container stack / application on the application vm, monitor that application and display the metrics on the metrics vm. I will manage everything through our control vm called Management through Ansible, using roles in playbooks.
