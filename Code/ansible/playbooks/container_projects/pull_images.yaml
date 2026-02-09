@@ -1,0 +1,54 @@
+---
+- name: Pull node-exporter and cAdvisor on all VMs (for metrics export)
+  hosts: all
+  gather_facts: yes
+  roles:
+    - role: containers/login/filip
+    - role: containers/images/pull
+      images_to_pull:
+        - manufacturer: "prom"
+          image_name: "node-exporter"
+          tag: "latest"
+
+        - manufacturer: "google"
+          image_name: "cadvisor"
+          tag: "latest"
+
+
+- name: Pull images to app-01
+  hosts: application
+  gather_facts: yes
+  roles:
+    - role: containers/login/filip
+    - role: containers/images/pull
+      images_to_pull:
+        - image_name: nginx
+          tag: "1.29.4"
+
+        - image_name: postgres
+          tag: latest
+
+- name: Pull images to metrics-01
+  hosts: monitoring
+  gather_facts: yes
+  roles:
+    - role: containers/login/filip
+    - role: containers/images/pull
+      images_to_pull:
+        - manufacturer: prom
+          image_name: prometheus
+          tag: main
+
+        - image_name: grafana
+          tag: "alpine-3.22.2"
+
+# TEMPLATE
+#- name:
+#  hosts:
+#  gather_facts: yes
+#  roles:
+#    - role: containers/images/pull
+#      images_to_pull:
+#        - manufacturer:#only if needed
+#          image_name:
+#          tag:
