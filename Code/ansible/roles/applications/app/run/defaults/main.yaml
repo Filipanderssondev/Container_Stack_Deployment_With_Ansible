@@ -1,0 +1,11 @@
+---
+app_name: my_app
+
+app_containers:
+  - name: webserver
+    image: nginx
+    tag: 1.29.4
+    ports:
+      - "8080:80"
+    volumes: []
+    env_vars: {}
