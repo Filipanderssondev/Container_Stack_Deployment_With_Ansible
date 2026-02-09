@@ -14,7 +14,7 @@ Container stack / application Deployment on virtual machines running Podman, thr
 ## Table of Contents
 
 1. [Introduction](#introduction)
-2. [Goals and Objectives](#goals-and-objectives)
+2. [Goals and Objectives](#goals-and-objectives) <br>
     2.1.[Structure](#Structure)
 4. [Method](#method)
 5. [Target Audience](#target-audience)
