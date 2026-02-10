@@ -41,6 +41,21 @@ The goals and objectives of this project is:
 - Doing it all through Ansible on the management VM
 <br>
 
+```mermaid
+flowchart TB
+    A["Ansible"] --> B["Podman containers"] & C["Prometheus"] & D
+    B --> C
+    C --> D["Grafana"]
+```
+
+```mermaid
+  flowchart TD
+ subgraph s1["Proxmox"]
+        A["Master VM"] --> B["App VM"] 
+        A --> C["Metrics VM"]
+  end
+```
+
 ### 2.1 Structure
 As i described in the beginning im going run a container stack / application on the application vm, monitor that application and display the metrics on the metrics vm. I will manage everything through our control vm called Management through Ansible, using roles in playbooks.
 
