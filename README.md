@@ -82,6 +82,10 @@ Application VM
 
 ## 3. Method
 
+Draft:
+- My method or approach is mostly developer driven since i am a developer/programmer aswell and started that way. I chose NGINX mostly because its reliable and easy to spin up. I chose Postgres mainly because it felt like the most relevant choice of database for this day an age and this kind of project and i wanted to try it, i am more used to "key=value" file based databases.
+
+- Why i decided to run HTML/CSS, Python Backend and Postgres is because i felt i want to have something more advanced for my NGINX Container to host, and something more advanced for Prometheus and Grafana to collect metrics from.
 
 ### 3.1 Preparation 
 - We have our earlier projects as a foundation, [a Server running Proxmox](https://github.com/rafaelurrutiasilva/Proxmox_on_Nuc/tree/) and proxmox running [three replicated virtual machines from a Rocky Linux OS base](https://github.com/Filipanderssondev/Rocky_Linux_OS_Base_for_VMs) and [Ansible configuration on the management vm](https://github.com/JonatanHogild/Ansible_on_management_vm)
