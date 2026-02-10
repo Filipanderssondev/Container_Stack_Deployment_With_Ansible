@@ -1,5 +1,5 @@
 # Container Stack Deployment With Ansible 
-<img widht="200" src="https://github.com/Filipanderssondev/Container_Stack_Deployment_With_Ansible/blob/main/Extra/project-4-container-stack.jpg" allign=left >
+<img widht="300" src="https://github.com/Filipanderssondev/Container_Stack_Deployment_With_Ansible/blob/main/Extra/project-4-container-stack.jpg" allign=left><br>
 <br>
 
 **Container Stack Deployment With Ansible**
