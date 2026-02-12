@@ -2,7 +2,7 @@
 ```mermaid
   flowchart TD
  subgraph s1["Proxmox"]
-        A["Master VM"] --> B["App VM"] 
-        A --> C["Metrics VM"]
+        A["Master VM"] --> |ssh|B["App VM"] 
+        A --> |ssh|C["Metrics VM"]
   end
 ```
