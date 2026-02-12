@@ -1,6 +1,6 @@
 ```mermaid
 flowchart TB
-    A["Ansible"] --> B["Podman containers"] & C["Prometheus"] & D
-    B --> C
-    C --> D["Grafana"]
+    A["Ansible"] --> |ssh|B["Podman containers"] & C["Prometheus"] & D
+    B --> |ssh|C
+    C --> |ssh| D["Grafana"]
 ```
