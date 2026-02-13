@@ -55,6 +55,50 @@ Draft:
 
 As i described in the beginning im going run a container stack / application on the application vm, monitor that application and display the metrics on the metrics vm. I will manage everything through our control vm called Management through Ansible, using roles in playbooks.
 
+```mermaid
+---
+config:
+  layout: dagre
+---
+flowchart LR
+ subgraph s1["Metrics-01"]
+        n1["Prometheus Container"]
+        n9["Grafana Container"]
+        n13["Podman"]
+  end
+ subgraph s2["App-01"]
+        n4["NGINX container"]
+        n5["Postgres container"]
+        n11["Podman"]
+        n12["Node Exporter Container"]
+  end
+ subgraph s3["Mgmt-01"]
+        n3["Ansible"]
+  end
+ subgraph s4["Showcase-01"]
+        n14["Rocky Linux Desktop OS"]
+  end
+    n9 -- HTTP --> n1
+    n11 -- OCI Runtime --> n5 & n4 & n12
+    n12 -- HTTP --> n5 & n4
+    n1 -- HTTP --> n12
+    n13 -- OCI Runtime --> n9 & n1
+    n14 -- HTTP --> n9
+    n3 -. SSH / Podman CLI .-> n11 & n13
+
+    n3@{ shape: rect}
+    linkStyle 0 stroke:#D50000,fill:none
+    linkStyle 1 stroke:#00C853,fill:none
+    linkStyle 2 stroke:#00C853,fill:none
+    linkStyle 3 stroke:#00C853,fill:none
+    linkStyle 4 stroke:#D50000,fill:none
+    linkStyle 5 stroke:#D50000,fill:none
+    linkStyle 6 stroke:#D50000,fill:none
+    linkStyle 7 stroke:#00C853,fill:none
+    linkStyle 8 stroke:#00C853,fill:none
+    linkStyle 9 stroke:#D50000,fill:none
+```
+
   **For the container stack i will run:**
   - NGINX as frontend, displaying basic HTML/CSS
   - Postgres as a database
@@ -75,21 +119,6 @@ Application VM
 
 - Note, that some details cant be disclosed due to company policy and that i will speak in general terms. For example the registry i will pull images from i will call _"private-registry.com/repository"_
 <br
-
-```mermaid
-flowchart TB
-    A["Ansible"] --> B["Podman containers"] & C["Prometheus"] & D
-    B --> C
-    C --> D["Grafana"]
-```
-
-```mermaid
-  flowchart TD
- subgraph s1["Proxmox"]
-        A["Master VM"] --> B["App VM"] 
-        A --> C["Metrics VM"]
-  end
-```
 
 - We have our earlier projects as a foundation, [a Server running Proxmox](https://github.com/rafaelurrutiasilva/Proxmox_on_Nuc/tree/) and proxmox running [three replicated virtual machines from a Rocky Linux OS base](https://github.com/Filipanderssondev/Rocky_Linux_OS_Base_for_VMs) and [Ansible configuration on the management vm](https://github.com/JonatanHogild/Ansible_on_management_vm)
 
