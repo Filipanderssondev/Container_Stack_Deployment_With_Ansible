@@ -14,7 +14,6 @@ Container stack / application Deployment on virtual machines running Podman, thr
 
 1. [Introduction](#introduction)
 2. [Goals and Objectives](#goals-and-objectives) <br>
-    2.1.[Structure](#Structure)
 4. [Method](#method)
 5. [Target Audience](#target-audience)
 6. [Document Status](#document-status)
@@ -36,27 +35,24 @@ _...to this project where i am going to do some container deployment through inf
 
 ## 2. Goals and Objectives
 The goals and objectives of this project is: 
-- To run an application on the application VM, hosting it on port 8080
+- To run an application on the application VM, hosting it basic html
 - Collect metrics from that app to the metrics VM, displaying it in Grafana.
 - Doing it all through Ansible on the management VM
 <br>
 
-```mermaid
-flowchart TB
-    A["Ansible"] --> B["Podman containers"] & C["Prometheus"] & D
-    B --> C
-    C --> D["Grafana"]
-```
+## 3. Method
 
-```mermaid
-  flowchart TD
- subgraph s1["Proxmox"]
-        A["Master VM"] --> B["App VM"] 
-        A --> C["Metrics VM"]
-  end
-```
+Draft:
+- My method or approach is mostly developer driven since i am a developer/programmer aswell and started that way. I chose NGINX mostly because its reliable and easy to spin up. I chose Postgres mainly because it felt like the most relevant choice of database for this day an age and this kind of project and i wanted to try it, i am more used to "key=value" file based databases.
 
-### 2.1 Structure
+- Why i decided to run HTML/CSS, Python Backend and Postgres is because i felt i want to have something more advanced for my NGINX Container to host, and something more advanced for Prometheus and Grafana to collect metrics from.
+
+- At first i approached with 
+
+### 3.1 Implementation
+
+### 3.1.1 Structure
+
 As i described in the beginning im going run a container stack / application on the application vm, monitor that application and display the metrics on the metrics vm. I will manage everything through our control vm called Management through Ansible, using roles in playbooks.
 
   **For the container stack i will run:**
@@ -78,16 +74,23 @@ Application VM
  - Running the application
 
 - Note, that some details cant be disclosed due to company policy and that i will speak in general terms. For example the registry i will pull images from i will call _"private-registry.com/repository"_
-<br>
+<br
 
-## 3. Method
+```mermaid
+flowchart TB
+    A["Ansible"] --> B["Podman containers"] & C["Prometheus"] & D
+    B --> C
+    C --> D["Grafana"]
+```
 
-Draft:
-- My method or approach is mostly developer driven since i am a developer/programmer aswell and started that way. I chose NGINX mostly because its reliable and easy to spin up. I chose Postgres mainly because it felt like the most relevant choice of database for this day an age and this kind of project and i wanted to try it, i am more used to "key=value" file based databases.
+```mermaid
+  flowchart TD
+ subgraph s1["Proxmox"]
+        A["Master VM"] --> B["App VM"] 
+        A --> C["Metrics VM"]
+  end
+```
 
-- Why i decided to run HTML/CSS, Python Backend and Postgres is because i felt i want to have something more advanced for my NGINX Container to host, and something more advanced for Prometheus and Grafana to collect metrics from.
-
-### 3.1 Preparation 
 - We have our earlier projects as a foundation, [a Server running Proxmox](https://github.com/rafaelurrutiasilva/Proxmox_on_Nuc/tree/) and proxmox running [three replicated virtual machines from a Rocky Linux OS base](https://github.com/Filipanderssondev/Rocky_Linux_OS_Base_for_VMs) and [Ansible configuration on the management vm](https://github.com/JonatanHogild/Ansible_on_management_vm)
 
 <br>
@@ -125,20 +128,6 @@ ansible/roles
 │       │   └── main.yaml
 │       └── tasks
 │           └── main.yaml
-├── applications
-│   ├── app
-│   │   ├── backend
-│   │   ├── db
-│   │   ├── frontend
-│   │   └── run
-│   │       ├── defaults
-│   │       │   └── main.yaml
-│   │       └── tasks
-│   │           └── main.yaml
-│   └── monitoring
-│       └── run
-│           ├── defaults
-│           └── tasks
 ~~~
 
 #### 3.2.1 Log in Role
@@ -187,15 +176,54 @@ ansible/roles/containers/images/pull/tasks/main.yaml
   loop: "{{ images_to_pull }}"
 ~~~
 
-<br>
 
-#### 3.2.3 Application roles
-
-<br>
 
 #### 3.2 Deploying the application
-N/A
 draft:
+
+/ansible/playbooks/container_projects/deploy_app.yaml
+~~~yaml
+---
+- name: Deploy containers
+  hosts: application
+  become: true
+  roles:
+    - role: containers/install
+    - role: containers/login/filip
+
+  tasks:
+    - name: Run nginx frontend
+      include_role:
+        name: containers/run
+      vars:
+        container_name: nginx_frontend
+        image_name: nginx
+        tag: 1.29.4
+        container_ports:
+          - "8081:80"
+        container_volumes:
+          - "/home/Filip/app_projects/frontend:/usr/share/nginx/html:Z"
+        container_cmd:
+          - "sh"
+          - "-c"
+          - "chown -R 0:0 /usr/share/nginx/html && nginx -g 'daemon off;'"
+        container_state: started
+        container_restart_policy: always
+        container_env_vars: {}
+
+    - name: Run postgres
+      include_role:
+        name: containers/run
+      vars:
+        container_name: database
+        image_name: postgres
+        tag: latest
+        container_ports:
+          - "5433:5432"
+        container_state: started
+        container_restart_policy: always
+        container_env_vars: {}
+~~~
 
 ##### Debug
 N/A
