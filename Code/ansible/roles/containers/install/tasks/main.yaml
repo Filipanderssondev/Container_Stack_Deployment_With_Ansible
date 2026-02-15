@@ -3,18 +3,10 @@
   ansible.builtin.dnf:
     name:
       - podman
-      - podman-compose
-      - buildah
     state: present
   become: true
 
 - name: Verify podman version
   ansible.builtin.command: podman --version
-
-- name: Verify podman compose version
-  ansible.builtin.command: podman-compose --version
-
-- name: Verify buildah version
-  ansible.builtin.command: buildah --version
-
+  
   #Basic install/Verification role to run in a playbook to ensure all the vms are up to date with the necisarry tools
