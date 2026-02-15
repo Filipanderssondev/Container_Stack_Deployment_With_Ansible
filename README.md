@@ -242,7 +242,7 @@ Great thanks once again to our mentor [Rafael](https://github.com/rafaelurrutias
 
 Every config file is available under the [code directory](https://github.com/Filipanderssondev/Container_Stack_Deployment_With_Ansible/tree/main/Code/ansible)
 
-**1. Step 1: Creating the Absible roles**
+#### Step 1: Creating the Absible roles
 
 What we need is:
 - A role for installing/Checking dependencies like Podman
@@ -250,7 +250,8 @@ What we need is:
 - A role for pulling images, the necisarry images on each machine
 - A role for creating and running the containers, with a defaults file (for defining our variables), and a tasks file for the logic.
 
-The install role, very straight forward basic. The key to every task in ansible playbooks or roles is the use of ansible modules, like the _ansible.builtin.dnf_ which allows the use of dnf package manager.
+**The install role**
+Very straight forward basic. The key to every task in ansible playbooks or roles is the use of ansible modules, like the _ansible.builtin.dnf_ which allows the use of dnf package manager.
 ~~~yaml
 ---
 - name: Installation of tools
@@ -264,6 +265,75 @@ The install role, very straight forward basic. The key to every task in ansible 
   ansible.builtin.command: podman --version
 ~~~
 <br>
+
+**The login role**
+
+The defaults:
+~~~yaml
+---
+#Default image registry
+registry_url: "www.private-container-registry.com/myrepository"  # Dummy value for demostration purpose
+tlsverify: tls-verify=false
+
+# As the registry URL isnt as sensitive information as my                                   
+# user credentials, its considered best practice to have it  
+# in my defaults main and not our encrypted vault file
+
+# PS: Out of necesity i need to have the tls verify false, 
+#i had many issues with certificate suthentivation on the vms so it is easier to do it like this so it dosent fail
+~~~
+
+the login tasks, the logic behind it:
+~~~yaml
+- name: Login to private-registry
+  containers.podman.podman_login:
+    registry: "{{ registry_url }}"
+    username: "{{ registry_username }}"
+    password: "{{ registry_password }}"
+    tlsverify: false
+
+#Login Mechanics
+#Referring to my credentials in our encrypted vault file following best practice methods
+~~~
+
+**The image pull role:**
+- Since some image paths varies, for example:
+  _private-registry.com/myrepository/image:tag_
+  _private-registry.com/myrepository/manufacturer/image:tag_
+i felt its safer and industry stabdard to create a mechanics for building the image name.
+
+As always, the defaut values defined in the defaults file
+~~~yaml
+---
+default_registry: "private-registry.com/repository"
+
+#image basics:
+default_image: "myimage"
+default_tag: "latest"
+tlsverify: false
+
+#manufacturer if needed like prom/prometheus:latest
+manufacturer: "mymanufacturer"
+
+#Default values variables for the pull/tasks/main.yaml mechanics
+~~~
+
+and the mechanics in the tasks file.
+~~~yaml
+---
+- name: Pull container images
+  containers.podman.podman_image:
+    name: >-
+      {{
+        default_registry
+        ~ '/'
+        ~ (item.get('manufacturer', '') ~ '/' if item.get('manufacturer', '') != '' else '')
+        ~ item.image_name
+        ~ ':'
+        ~ (item.get('tag', default_tag))
+      }}
+    state: present
+~~~
 
 **Step 2: Composing and running the playbooks**
 
