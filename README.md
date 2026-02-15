@@ -1,5 +1,5 @@
 # Container Stack Deployment With Ansible 
-<img widht="100" src="https://github.com/Filipanderssondev/Container_Stack_Deployment_With_Ansible/blob/main/Extra/project-4-container-stack.jpg" allign=left><br>
+<img widht="100" src="" allign=left><br>
 
 **Container Stack Deployment With Ansible**
 <br>**Authors:** _<a href="https://github.com/Filipanderssondev">Filip Andersson</a> and <a href="https://github.com/JonatanHogild">Jonatan Högild</a>_<br>
@@ -72,12 +72,7 @@ Management VM:
 Application VM
  - Running Podman as runtime enviroment
  - Running the application
--->
 
-- Note, that some details cant be disclosed due to company policy and that i will speak in general terms. For example the registry i will pull images from i will call _"private-registry.com/repository"_
-<br
-
-<!--
 - We have our earlier projects as a foundation, [a Server running Proxmox](https://github.com/rafaelurrutiasilva/Proxmox_on_Nuc/tree/) and proxmox running [three replicated virtual machines from a Rocky Linux OS base](https://github.com/Filipanderssondev/Rocky_Linux_OS_Base_for_VMs) and [Ansible configuration on the management vm](https://github.com/JonatanHogild/Ansible_on_management_vm)
 
 <br>
@@ -247,6 +242,8 @@ Great thanks once again to our mentor [Rafael](https://github.com/rafaelurrutias
 
 ### Implementation
 
+- Note, that some details cant be disclosed due to company policy and that i will speak in general terms. For example the registry i will pull images from i will call _"private-registry.com/repository"_
+<br
 
 ## Conclusion
 Slutsats
