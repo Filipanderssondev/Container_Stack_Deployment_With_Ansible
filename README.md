@@ -21,8 +21,9 @@ Container stack / application Deployment on virtual machines running Podman, thr
 8. [Scope and Limitations](#scope-and-limitations)
 9. [Environment](#environment)
 10. [Acknowledgments](#acknowledgments)
-11. [References](#references)
+11. [Implementation](#implementation)
 12. [Conclusion](#conclusion)
+13. [References](#references)
 <br>
 
 ## 1. Introduction<br>
@@ -42,62 +43,17 @@ The goals and objectives of this project is:
 
 ## 3. Method
 
+The solution was implemented using Ansible on a management VM to automate the deployment of a container-based application on virtual machines with Podman. The container stack consisted of NGINX (frontend), Python (backend), and Postgres (database), along with monitoring using Prometheus and Grafana. Reusable Ansible roles and playbooks were used to install dependencies, pull images, and start containers with defined ports and volumes. To collect the container images from the private image registry, an ansible login role was composed and implemented with the mechanics of fetching confidential login credentials defined in the encrypted vault file in our ansible structure.
+
+<!--
+
 Draft:
 - My method or approach is mostly developer driven since i am a developer/programmer aswell and started that way. I chose NGINX mostly because its reliable and easy to spin up. I chose Postgres mainly because it felt like the most relevant choice of database for this day an age and this kind of project and i wanted to try it, i am more used to "key=value" file based databases.
 
 - Why i decided to run HTML/CSS, Python Backend and Postgres is because i felt i want to have something more advanced for my NGINX Container to host, and something more advanced for Prometheus and Grafana to collect metrics from.
 
 - At first i approached with 
-
-### 3.1 Implementation
-
-### 3.1.1 Structure
-
 As i described in the beginning im going run a container stack / application on the application vm, monitor that application and display the metrics on the metrics vm. I will manage everything through our control vm called Management through Ansible, using roles in playbooks.
-
-```mermaid
----
-config:
-  layout: dagre
----
-flowchart LR
- subgraph s1["Metrics-01"]
-        n1["Prometheus Container"]
-        n9["Grafana Container"]
-        n13["Podman"]
-  end
- subgraph s2["App-01"]
-        n4["NGINX container"]
-        n5["Postgres container"]
-        n11["Podman"]
-        n12["Node Exporter Container"]
-  end
- subgraph s3["Mgmt-01"]
-        n3["Ansible"]
-  end
- subgraph s4["Showcase-01"]
-        n14["Rocky Linux Desktop OS"]
-  end
-    n9 -- HTTP --> n1
-    n11 -- OCI Runtime --> n5 & n4 & n12
-    n12 -- HTTP --> n5 & n4
-    n1 -- HTTP --> n12
-    n13 -- OCI Runtime --> n9 & n1
-    n14 -- HTTP --> n9
-    n3 -. SSH / Podman CLI .-> n11 & n13
-
-    n3@{ shape: rect}
-    linkStyle 0 stroke:#D50000,fill:none
-    linkStyle 1 stroke:#00C853,fill:none
-    linkStyle 2 stroke:#00C853,fill:none
-    linkStyle 3 stroke:#00C853,fill:none
-    linkStyle 4 stroke:#D50000,fill:none
-    linkStyle 5 stroke:#D50000,fill:none
-    linkStyle 6 stroke:#D50000,fill:none
-    linkStyle 7 stroke:#00C853,fill:none
-    linkStyle 8 stroke:#00C853,fill:none
-    linkStyle 9 stroke:#D50000,fill:none
-```
 
   **For the container stack i will run:**
   - NGINX as frontend, displaying basic HTML/CSS
@@ -116,10 +72,12 @@ Management VM:
 Application VM
  - Running Podman as runtime enviroment
  - Running the application
+-->
 
 - Note, that some details cant be disclosed due to company policy and that i will speak in general terms. For example the registry i will pull images from i will call _"private-registry.com/repository"_
 <br
 
+<!--
 - We have our earlier projects as a foundation, [a Server running Proxmox](https://github.com/rafaelurrutiasilva/Proxmox_on_Nuc/tree/) and proxmox running [three replicated virtual machines from a Rocky Linux OS base](https://github.com/Filipanderssondev/Rocky_Linux_OS_Base_for_VMs) and [Ansible configuration on the management vm](https://github.com/JonatanHogild/Ansible_on_management_vm)
 
 <br>
@@ -258,6 +216,7 @@ draft:
 N/A
 
 <br>
+-->
 
 ## 4. Target Audience
 - This repo is for anyone who wants a step-by-step guide on .
@@ -286,14 +245,20 @@ This repo is also part of a larger project aimed at people interested in learnin
 ## Acknowledgments
 Great thanks once again to our mentor [Rafael](https://github.com/rafaelurrutiasilva) and [Victor](https://github.com/ludd98) for helping with 
 
+### Implementation
+
+
+## Conclusion
+Slutsats
+
 ## References
 - [Dockerhub (public image repository](https://hub.docker.com/)
+- [Ansible structure](https://github.com/Filipanderssondev/Container_Stack_Deployment_With_Ansible/blob/main/Extra/Ansible_structure.md)
 
-### Our other projects
+### Other projects in our IT-infrastructure
 1. [Proxmox_on_Nuc](https://github.com/rafaelurrutiasilva/Proxmox_on_Nuc)
 2. [Rocky_Linux_OS_Base_for_VMs](https://github.com/Filipanderssondev/Rocky_Linux_OS_Base_for_VMs)
 3. [Ansible_on_management_vm](https://github.com/JonatanHogild/Ansible_on_management_vm)
 4. [Podman_Compose_app_on_VMs](https://github.com/Filipanderssondev/Podman_Compose_app_on_VMs)
 
-## Conclusion
-Slutsats
+
