@@ -28,7 +28,7 @@ Container stack / application Deployment on virtual machines running Podman, thr
 
 ## 1. Introduction<br>
 **Welcome friend!**
-_...to this project where i am going to do some container deployment through infrastructure-as-code (IaC) with Ansible. Im going to deploy an application / stack of containers on two worker VMs, the application VM will serve as our runtime enviroment and the metrics VM serving as our metrics collector / Monitoring for that app, running Prometheus and Grafana. I will run everything on the VM called management, that will serve as our control VM running Ansible. I will do this by configuring Ansible Roles, and using those ansible roles in playbooks. This is our fourth project <a href="https://github.com/rafaelurrutiasilva/Proxmox_on_Nuc/blob/main/Extra/Mermaid/Projects.md">in a series of projects</a> with the end goal of setting up a complete virtualized, automated, and monitored IT-Enviroment as a part of our internship on [The Swedish Meteorological and Hydrological Institute (SMHI)](https://www.smhi.se/en/about-smhi) IT-department at the headquarters in Norrköping. The second goal of these projects are also supposed to serve as a set-up guide here on Github for anyone and everyone that wants to replicate what we have done. we will link every project to each other aswell._<br>
+_ in this project we are going to deploy a container-based application using infrastructure-as-code (IaC), Ansible. Deployment of containers on two worker VMs, the application VM will serve as our runtime enviroment and the metrics VM serving as our metrics collector / Monitoring for that app, running Prometheus and Grafana. Everything will be managed from our management VM running Ansible. This will be done by configuring Ansible roles, and reusing those roles in playbooks. This is our fourth project <a href="https://github.com/rafaelurrutiasilva/Proxmox_on_Nuc/blob/main/Extra/Mermaid/Projects.md">in a series of projects</a> with the end goal of setting up a complete virtualized, automated, and monitored IT-Enviroment as a part of our internship on [The Swedish Meteorological and Hydrological Institute (SMHI)](https://www.smhi.se/en/about-smhi) IT-department at the headquarters in Norrköping. The second goal of these projects are also supposed to serve as a set-up guide here on Github for anyone and everyone that wants to replicate what we have done. we will link every project to each other aswell._<br>
 
 **<a href="https://github.com/Filipanderssondev">Filip Andersson</a> and <a href="https://github.com/JonatanHogild">Jonatan Högild</a>**
 <br>
@@ -46,11 +46,6 @@ The goals and objectives of this project is:
 The solution was implemented using Ansible on a management VM to automate the deployment of a container-based application on virtual machines with Podman. The container stack consisted of NGINX (frontend), Python (backend), and Postgres (database), along with monitoring using Prometheus and Grafana. Reusable Ansible roles and playbooks were used to install dependencies, pull images, and start containers with defined ports and volumes. To collect the container images from the private image registry, an ansible login role was composed and implemented with the mechanics of fetching confidential login credentials defined in the encrypted vault file in our ansible structure.
 
 <!--
-
-Draft:
-- My method or approach is mostly developer driven since i am a developer/programmer aswell and started that way. I chose NGINX mostly because its reliable and easy to spin up. I chose Postgres mainly because it felt like the most relevant choice of database for this day an age and this kind of project and i wanted to try it, i am more used to "key=value" file based databases.
-
-- Why i decided to run HTML/CSS, Python Backend and Postgres is because i felt i want to have something more advanced for my NGINX Container to host, and something more advanced for Prometheus and Grafana to collect metrics from.
 
 - At first i approached with 
 As i described in the beginning im going run a container stack / application on the application vm, monitor that application and display the metrics on the metrics vm. I will manage everything through our control vm called Management through Ansible, using roles in playbooks.
@@ -244,6 +239,35 @@ Great thanks once again to our mentor [Rafael](https://github.com/rafaelurrutias
 
 - Note, that some details cant be disclosed due to company policy and that i will speak in general terms. For example the registry i will pull images from i will call _"private-registry.com/repository"_
 <br
+
+Every config file is available under the [code directory](https://github.com/Filipanderssondev/Container_Stack_Deployment_With_Ansible/tree/main/Code/ansible)
+
+**1. Step 1: Creating the Absible roles**
+
+What we need is:
+- A role for installing/Checking dependencies like Podman
+- A role for logging in to the private registry, fetching the credentials in our encryoted vault file
+- A role for pulling images, the necisarry images on each machine
+- A role for creating and running the containers, with a defaults file (for defining our variables), and a tasks file for the logic.
+
+The install role, very straight forward basic. The key to every task in ansible playbooks or roles is the use of ansible modules, like the _ansible.builtin.dnf_ which allows the use of dnf package manager.
+~~~yaml
+---
+- name: Installation of tools
+  ansible.builtin.dnf:
+    name:
+      - podman
+    state: present
+  become: true
+
+- name: Verify podman version
+  ansible.builtin.command: podman --version
+~~~
+<br>
+
+**Step 2: Composing and running the playbooks**
+
+**Step 3: 
 
 ## Conclusion
 Slutsats
