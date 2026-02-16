@@ -336,9 +336,9 @@ and the mechanics in the tasks file.
       }}
     state: present
 ~~~
-
+<!--
 ### Composing and running the playbooks
-
+-->
 
 ## Conclusion
 Slutsats
