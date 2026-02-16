@@ -26,7 +26,7 @@ Container stack / application Deployment on virtual machines running Podman, thr
 13. [References](#references)
 <br>
 
-## 1. Introduction<br>
+## Introduction<br>
 **Welcome friend!**
 _ in this project we are going to deploy a container-based application using infrastructure-as-code (IaC), Ansible. Deployment of containers on two worker VMs, the application VM will serve as our runtime enviroment and the metrics VM serving as our metrics collector / Monitoring for that app, running Prometheus and Grafana. Everything will be managed from our management VM running Ansible. This will be done by configuring Ansible roles, and reusing those roles in playbooks. This is our fourth project <a href="https://github.com/rafaelurrutiasilva/Proxmox_on_Nuc/blob/main/Extra/Mermaid/Projects.md">in a series of projects</a> with the end goal of setting up a complete virtualized, automated, and monitored IT-Enviroment as a part of our internship on [The Swedish Meteorological and Hydrological Institute (SMHI)](https://www.smhi.se/en/about-smhi) IT-department at the headquarters in Norrköping. The second goal of these projects are also supposed to serve as a set-up guide here on Github for anyone and everyone that wants to replicate what we have done. we will link every project to each other aswell._<br>
 
@@ -34,14 +34,14 @@ _ in this project we are going to deploy a container-based application using inf
 <br>
 <br>
 
-## 2. Goals and Objectives
+## Goals and Objectives
 The goals and objectives of this project is: 
 - To run an application on the application VM, hosting it basic html
 - Collect metrics from that app to the metrics VM, displaying it in Grafana.
 - Doing it all through Ansible on the management VM
 <br>
 
-## 3. Method
+## Method
 
 The solution was implemented using Ansible on a management VM to automate the deployment of a container-based application on virtual machines with Podman. The container stack consisted of NGINX (frontend), Python (backend), and Postgres (database), along with monitoring using Prometheus and Grafana. Reusable Ansible roles and playbooks were used to install dependencies, pull images, and start containers with defined ports and volumes. To collect the container images from the private image registry, an ansible login role was composed and implemented with the mechanics of fetching confidential login credentials defined in the encrypted vault file in our ansible structure.
 
@@ -208,7 +208,7 @@ N/A
 <br>
 -->
 
-## 4. Target Audience
+## Target Audience
 - This repo is for anyone who wants a step-by-step guide on .
 This repo is also part of a larger project aimed at people interested in learning about IaC, and building such an environment from scratch. 
 <br><br>
