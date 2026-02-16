@@ -21,9 +21,11 @@ Container stack application Deployment and monitoring on virtual machines runnin
 8. [Scope and Limitations](#scope-and-limitations)
 9. [Environment](#environment)
 10. [Acknowledgments](#acknowledgments)
-11. [Implementation](#implementation)
-12. [Conclusion](#conclusion)
-13. [References](#references)
+11. [Implementation](#implementation) <br>
+    	11.1 [Creating the Ansible roles](#creating-the-ansible-roles) <br>
+		11.2 [Composing and running the playbooks](#composing-and-running-the-playbooks) <br>
+13. [Conclusion](#conclusion)
+14. [References](#references)
 <br>
 
 ## Introduction<br>
@@ -242,7 +244,7 @@ Great thanks once again to our mentor [Rafael](https://github.com/rafaelurrutias
 
 Every config file is available under the [code directory](https://github.com/Filipanderssondev/Container_Stack_Deployment_With_Ansible/tree/main/Code/ansible)
 
-#### Step 1: Creating the Absible roles
+#### Creating the Absible roles
 
 What we need is:
 - A role for installing/Checking dependencies like Podman
@@ -335,9 +337,8 @@ and the mechanics in the tasks file.
     state: present
 ~~~
 
-**Step 2: Composing and running the playbooks**
+### Composing and running the playbooks
 
-**Step 3: 
 
 ## Conclusion
 Slutsats
