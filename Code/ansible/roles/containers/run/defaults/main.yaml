@@ -16,4 +16,6 @@ container_ports: [] #What port/ports to run the container at
 container_env_vars: {} #Enviroment variables
 container_volumes: [] # List of "host path:container path"
 container_restart_policy: always
+container_cmd: []
+
 
