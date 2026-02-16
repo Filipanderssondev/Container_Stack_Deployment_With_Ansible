@@ -8,3 +8,4 @@
     env: "{{ container_env_vars  }}"
     volumes: "{{ container_volumes | default(omit) }}"
     restart_policy: "{{ container_restart_policy | default('always') }}"
+    command: "{{ container_cmd | default([]) }}"
