@@ -1,0 +1,41 @@
+---
+- name: Run Prometheus
+  hosts: monitoring
+  become: true
+
+  roles:
+    - role: containers/login/filip
+
+  tasks:
+    - name: Run prometheus container
+      include_role:
+        name: containers/run
+      vars:
+        container_name: prometheus
+        image_name: prom/prometheus
+        tag: main
+        container_ports:
+          - "9091:9090"
+        container_volumes:
+          - "/home/Filip/prometheus/prometheus-config.yaml:/etc/prometheus/prometheus.yaml:Z"
+        container_env_vars: {}
+        container_state: started
+        container_restart_policy: always
+
+- name: Run Grafana
+  hosts: monitoring
+  become: true
+  tasks:
+    - name: Run Grafana container
+      include_role:
+        name: containers/run
+      vars:
+        container_name: grafana
+        image_name: grafana
+        tag: "alpine-3.22.2"
+        container_ports:
+          - "3000:3000"
+        container_env_vars: {}
+        container_volumes: []
+        container_state: started
+        container_restart_policy: always
