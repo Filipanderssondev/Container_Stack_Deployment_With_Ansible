@@ -45,7 +45,7 @@ The goals and objectives of this project is:
 
 ## Method
 
-The solution was implemented using Ansible on a management VM to automate the deployment of a container-based application on virtual machines running Podman. The container stack consisted of NGINX (frontend), Python (backend), and Postgres (database), along with monitoring using container based Prometheus node exporters on each vm for exporting metrics, running Prometheus Grafana both as containers on the monitoring vm, configuring prometheus as a data source for Grafana to visualize the result. Reusable Ansible roles and playbooks were used to install dependencies, pull images, and start containers with defined ports and volumes. To collect the container images from the private image registry, an ansible login role was composed and implemented with the mechanics of fetching confidential login credentials defined in the encrypted vault file in our ansible structure.
+The solution was implemented using Ansible on a management VM to automate the deployment of a container-based application on virtual machines running Podman. The container stack consisted of NGINX (frontend) along with monitoring using container based Prometheus node exporters on each vm for exporting metrics, running Prometheus Grafana both as containers on the monitoring vm, configuring prometheus as a data source for Grafana to visualize the result. Reusable Ansible roles and playbooks were used to install dependencies, pull images, and start containers with defined ports and volumes. To collect the container images from the private image registry, an ansible login role was composed and implemented with the mechanics of fetching confidential login credentials defined in the encrypted vault file in our ansible structure.
 
 <!--
 
@@ -203,6 +203,58 @@ This is the mechanics for the image name builder, For each image in a list, it b
       }}
     state: present
 ~~~
+
+#####
+
+### Deploying the frontend to the application VM
+
+I want to display some basic HTML/CSS/JS on in my frontend container, so i compose basic web files, and since im only going to do this once theres no need to create an entire play for it. So i just send them to my desired directory on the application vm.
+
+#### On the management VM
+These are my frontend files: 
+
+#### index.HTML
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Welcome to My App!</h1>
+    <button id="clickBtn">Click Me</button>
+    <p id="message"></p>
+
+    <script src="script.js"></script>
+</body>
+</html>
+```
+#### style.CSS
+```css
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin-top: 50px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+}
+```
+
+#### script.js
+```javascript
+document.getElementById('clickBtn').addEventListener('click', function() {
+    document.getElementById('message').innerText = "You clicked the button!";
+});
+```
+then i just send them to where i want them. The "-r" means recursivly, so this goes for every folder in the parent folder.
+```bash
+spc -r /home/Filip/projects/frontend filip@10.208.12.103:/home/Filip/app_projects/frontend
+```
 <!--
 ### Composing and running the playbooks
 -->
