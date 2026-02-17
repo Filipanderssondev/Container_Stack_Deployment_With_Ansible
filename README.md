@@ -34,9 +34,7 @@ Container stack application Deployment and monitoring on virtual machines runnin
 **Welcome friend!** <br>
 _In this project we are going to deploy a container-based application using infrastructure-as-code (IaC), Ansible. Deployment of containers on two worker VMs, the application VM will serve as our runtime enviroment and the metrics VM serving as our metrics collector / Monitoring for that app, running Prometheus and Grafana. Everything will be managed from our management VM running Ansible. This will be done by configuring Ansible roles, and reusing those roles in playbooks. This is our fourth project <a href="https://github.com/rafaelurrutiasilva/Proxmox_on_Nuc/blob/main/Extra/Mermaid/Projects.md">in a series of projects</a> with the end goal of setting up a complete virtualized, automated, and monitored IT-Enviroment as a part of our internship on [The Swedish Meteorological and Hydrological Institute (SMHI)](https://www.smhi.se/en/about-smhi) IT-department at the headquarters in Norrköping. The second goal of these projects are also supposed to serve as a set-up guide here on Github for anyone and everyone that wants to replicate what we have done. we will link every project to each other aswell._ <br>
 
-_[Other projects in our virtual IT-enviroment](#other-projects-in-our-virtual-it-enviroment)_ <br>
-**<a href="https://github.com/Filipanderssondev">Filip Andersson</a> and <a href="https://github.com/JonatanHogild">Jonatan Högild</a>**
-<br>
+_[Other projects in our virtual IT-enviroment](#other-projects-in-our-virtual-it-enviroment)_
 
 ## Goals and Objectives
 The goals and objectives of this project is: 
