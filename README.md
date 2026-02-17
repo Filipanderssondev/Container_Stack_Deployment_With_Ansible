@@ -45,7 +45,7 @@ The goals and objectives of this project is:
 
 ## Method
 
-The solution was implemented using Ansible on a management VM to automate the deployment of a container-based application on virtual machines with Podman. The container stack consisted of NGINX (frontend), Python (backend), and Postgres (database), along with monitoring using Prometheus and Grafana. Reusable Ansible roles and playbooks were used to install dependencies, pull images, and start containers with defined ports and volumes. To collect the container images from the private image registry, an ansible login role was composed and implemented with the mechanics of fetching confidential login credentials defined in the encrypted vault file in our ansible structure.
+The solution was implemented using Ansible on a management VM to automate the deployment of a container-based application on virtual machines running Podman. The container stack consisted of NGINX (frontend), Python (backend), and Postgres (database), along with monitoring using container based Prometheus node exporters on each vm for exporting metrics, running Prometheus Grafana both as containers on the monitoring vm, configuring prometheus as a data source for Grafana to visualize the result. Reusable Ansible roles and playbooks were used to install dependencies, pull images, and start containers with defined ports and volumes. To collect the container images from the private image registry, an ansible login role was composed and implemented with the mechanics of fetching confidential login credentials defined in the encrypted vault file in our ansible structure.
 
 <!--
 
@@ -80,134 +80,6 @@ For each role, i will create a deafults/main.yaml and a tasks/main.yaml as is th
 - I will need a role for logging into the private registry
 - I will need a role for checking that enviroment tools like podman exists 
 - I will need a role who pulls images, run applications.
-
-My project structuer will look something like this:
-<br>
-~~~yaml
-ansible/roles
-├── containers
-│   ├── images
-│   │   └── pull
-│   │       ├── defaults
-│   │       │   └── main.yaml
-│   │       └── tasks
-│   │           └── main.yaml
-│   ├── install
-│   │   └── tasks
-│   │       └── main.yaml
-│   ├── login
-│   │   ├── filip
-│   │   │   ├── defaults
-│   │   │   │   └── main.yaml
-│   │   │   └── tasks
-│   │   │       └── main.yaml
-│   │   └── jonatan
-│   └── run
-│       ├── defaults
-│       │   └── main.yaml
-│       └── tasks
-│           └── main.yaml
-~~~
-
-#### 3.2.1 Log in Role
-
-<br>
-
-#### 3.2.2 Installation role
-
-<br>
-
-#### 3.2.3 image Pull role
-
-ansible/roles/containers/images/pull/defaults/main.yaml
-~~~yaml
----
-default_registry: "private-registry.com/repository"
-
-#image basics
-image_name: ""
-tag: "latest"
-tlsverify: false
-
-#manufacturer if needed like prom/prometheus:latest
-manufacturer: ""
-
-images_to_pull:[]
-~~~
-
-ansible/roles/containers/images/pull/tasks/main.yaml
-
-~~~yaml
----
-- name: Pull images
-  containers.podman.podman_image:
-    name: >-
-      {{
-        default_registry
-        + '/'
-	+ (item.manufacturer ~ '/' if item.manufacturer is defined else '')
-        + item.image_name
-        + ':'
-	+ (item.tag | default(default_tag))
-      }}
-    state: present
-    tlsverify: "{{ tlsverify }}"
-  loop: "{{ images_to_pull }}"
-~~~
-
-
-
-#### 3.2 Deploying the application
-draft:
-
-/ansible/playbooks/container_projects/deploy_app.yaml
-~~~yaml
----
-- name: Deploy containers
-  hosts: application
-  become: true
-  roles:
-    - role: containers/install
-    - role: containers/login/filip
-
-  tasks:
-    - name: Run nginx frontend
-      include_role:
-        name: containers/run
-      vars:
-        container_name: nginx_frontend
-        image_name: nginx
-        tag: 1.29.4
-        container_ports:
-          - "8081:80"
-        container_volumes:
-          - "/home/Filip/app_projects/frontend:/usr/share/nginx/html:Z"
-        container_cmd:
-          - "sh"
-          - "-c"
-          - "chown -R 0:0 /usr/share/nginx/html && nginx -g 'daemon off;'"
-        container_state: started
-        container_restart_policy: always
-        container_env_vars: {}
-
-    - name: Run postgres
-      include_role:
-        name: containers/run
-      vars:
-        container_name: database
-        image_name: postgres
-        tag: latest
-        container_ports:
-          - "5433:5432"
-        container_state: started
-        container_restart_policy: always
-        container_env_vars: {}
-~~~
-
-##### Debug
-N/A
-
-<br>
 -->
 
 ## Target Audience
@@ -244,7 +116,7 @@ Great thanks once again to our mentor [Rafael](https://github.com/rafaelurrutias
 
 Every config file is available under the [code directory](https://github.com/Filipanderssondev/Container_Stack_Deployment_With_Ansible/tree/main/Code/ansible)
 
-#### Creating the Absible roles
+### Configuring reusable roles
 
 What we need is:
 - A role for installing/Checking dependencies like Podman
@@ -252,7 +124,7 @@ What we need is:
 - A role for pulling images, the necisarry images on each machine
 - A role for creating and running the containers, with a defaults file (for defining our variables), and a tasks file for the logic.
 
-**The install role**
+#### The dependencies installation role
 Very straight forward basic. The key to every task in ansible playbooks or roles is the use of ansible modules, like the _ansible.builtin.dnf_ which allows the use of dnf package manager.
 ~~~yaml
 ---
@@ -268,24 +140,26 @@ Very straight forward basic. The key to every task in ansible playbooks or roles
 ~~~
 <br>
 
-**The login role**
 
-The defaults:
+#### Login role
+
+##### Defaults file
+
+As the registry URL isnt as sensitive information as my                                   
+user credentials, its considered best practice to have it  
+in my defaults main and not our encrypted vault file
+
+Out of necesity i need to have the tls verify false, i had many issues with certificate suthentivation on the vms so it is easier to do it like this so it dosent fail
 ~~~yaml
 ---
 #Default image registry
 registry_url: "www.private-container-registry.com/myrepository"  # Dummy value for demostration purpose
 tlsverify: tls-verify=false
-
-# As the registry URL isnt as sensitive information as my                                   
-# user credentials, its considered best practice to have it  
-# in my defaults main and not our encrypted vault file
-
-# PS: Out of necesity i need to have the tls verify false, 
-#i had many issues with certificate suthentivation on the vms so it is easier to do it like this so it dosent fail
 ~~~
 
-the login tasks, the logic behind it:
+##### tasks file
+This is the logic for logging us in, using the module _containers.podman.podman_login_. Here im referring to the variables in my encrypted vault file. This is considered best practice.
+
 ~~~yaml
 - name: Login to private-registry
   containers.podman.podman_login:
@@ -293,18 +167,15 @@ the login tasks, the logic behind it:
     username: "{{ registry_username }}"
     password: "{{ registry_password }}"
     tlsverify: false
-
-#Login Mechanics
-#Referring to my credentials in our encrypted vault file following best practice methods
 ~~~
 
-**The image pull role:**
+#### image pull role
 - Since some image paths varies, for example:
-  _private-registry.com/myrepository/image:tag_
-  _private-registry.com/myrepository/manufacturer/image:tag_
-i felt its safer and industry stabdard to create a mechanics for building the image name.
+	 _private-registry.com/myrepository/image:tag_
+ 	 _private-registry.com/myrepository/manufacturer/image:tag_
+Its considered industry stabdard, and generally safer to create a mechanics for building the image name. 
 
-As always, the defaut values defined in the defaults file
+##### Defaults file
 ~~~yaml
 ---
 default_registry: "private-registry.com/repository"
@@ -313,14 +184,10 @@ default_registry: "private-registry.com/repository"
 default_image: "myimage"
 default_tag: "latest"
 tlsverify: false
-
-#manufacturer if needed like prom/prometheus:latest
-manufacturer: "mymanufacturer"
-
-#Default values variables for the pull/tasks/main.yaml mechanics
 ~~~
 
-and the mechanics in the tasks file.
+##### Tasks file
+This is the mechanics for the image name builder, For each image in a list, it builds the full image name (registry, optional manufacturer, image name, and version tag). If a version is not specified, it uses a default fallback value defined in the defaults file.
 ~~~yaml
 ---
 - name: Pull container images
