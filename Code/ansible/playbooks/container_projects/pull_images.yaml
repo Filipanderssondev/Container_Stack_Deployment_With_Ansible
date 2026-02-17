@@ -1,5 +1,5 @@
 ---
-- name: Pull node-exporter and cAdvisor on all VMs (for metrics export)
+- name: Pull node-exporter on all VMs
   hosts: all
   gather_facts: yes
   roles:
@@ -9,11 +9,6 @@
         - manufacturer: "prom"
           image_name: "node-exporter"
           tag: "latest"
-
-        - manufacturer: "google"
-          image_name: "cadvisor"
-          tag: "latest"
-
 
 - name: Pull images to app-01
   hosts: application
@@ -41,14 +36,3 @@
 
         - image_name: grafana
           tag: "alpine-3.22.2"
-
-# TEMPLATE
-#- name:
-#  hosts:
-#  gather_facts: yes
-#  roles:
-#    - role: containers/images/pull
-#      images_to_pull:
-#        - manufacturer:#only if needed
-#          image_name:
-#          tag:
