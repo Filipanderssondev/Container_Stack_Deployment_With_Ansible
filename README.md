@@ -349,9 +349,10 @@ Slutsats
 - [Ansible structure](https://github.com/Filipanderssondev/Container_Stack_Deployment_With_Ansible/blob/main/Extra/Ansible_structure.md)
 
 ### Other parts in our project
-1. [Proxmox_on_Nuc](https://github.com/rafaelurrutiasilva/Proxmox_on_Nuc)
-2. [Rocky_Linux_OS_Base_for_VMs](https://github.com/Filipanderssondev/Rocky_Linux_OS_Base_for_VMs)
-3. [Ansible_on_management_vm](https://github.com/JonatanHogild/Ansible_on_management_vm)
-4. [Podman_Compose_app_on_VMs](https://github.com/Filipanderssondev/Podman_Compose_app_on_VMs)
+- Part 1. [Proxmox_on_Nuc](https://github.com/rafaelurrutiasilva/Proxmox_on_Nuc)
+- Part 2. [Rocky_Linux_OS_Base_for_VMs](https://github.com/Filipanderssondev/Rocky_Linux_OS_Base_for_VMs)
+- Part 3. [Ansible_on_management_vm](https://github.com/JonatanHogild/Ansible_on_management_vm)
+- Part 4. [Podman_Compose_app_on_VMs](https://github.com/Filipanderssondev/Podman_Compose_app_on_VMs)
+- Part 5. [FreeIPA for virtual enviroment](https://github.com/JonatanHogild/FreeIPA_for_virtual_environment)
 
 
