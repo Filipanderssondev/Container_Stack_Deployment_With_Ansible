@@ -1,0 +1,40 @@
+---
+- name: Deploy containers
+  hosts: application
+  become: true
+  roles:
+    - role: containers/install
+    - role: containers/login/filip
+
+  tasks:
+    - name: Run nginx frontend
+      include_role:
+        name: containers/run
+      vars:
+        container_name: nginx_frontend
+        image_name: nginx
+        tag: 1.29.4
+        container_ports:
+          - "8081:80"
+        container_volumes:
+          - "/home/Filip/app_projects/frontend:/usr/share/nginx/html:Z"
+        container_cmd:
+          - "sh"
+          - "-c"
+          - "chown -R 0:0 /usr/share/nginx/html && nginx -g 'daemon off;'"
+        container_state: started
+        container_restart_policy: always
+        container_env_vars: {}
+
+    - name: Run postgres
+      include_role:
+        name: containers/run
+      vars:
+        container_name: database
+        image_name: postgres
+        tag: latest
+        container_ports:
+          - "5433:5432"
+        container_state: started
+        container_restart_policy: always
+        container_env_vars: {}
