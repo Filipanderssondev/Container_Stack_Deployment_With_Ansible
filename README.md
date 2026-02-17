@@ -1,5 +1,6 @@
 # Container Stack Deployment With Ansible 
-<img widht="100" src="https://github.com/Filipanderssondev/Container_Stack_Deployment_With_Ansible/blob/main/Extra/container-stack-image.png" allign=left><br>
+<!-- <img widht="100" src="https://github.com/Filipanderssondev/Container_Stack_Deployment_With_Ansible/blob/main/Extra/container-stack-image.png" allign=left><br> -->
+<img src="https://github.com/Filipanderssondev/Container_Stack_Deployment_With_Ansible/blob/main/Extra/container-stack-deployment.png" allign=left>
 
 **Container Stack Deployment With Ansible**
 <br>**Authors:** _<a href="https://github.com/Filipanderssondev">Filip Andersson</a> and <a href="https://github.com/JonatanHogild">Jonatan Högild</a>_<br>
@@ -26,14 +27,14 @@ Container stack application Deployment and monitoring on virtual machines runnin
 		11.2 [Composing and running the playbooks](#composing-and-running-the-playbooks) <br>
 13. [Conclusion](#conclusion)
 14. [References](#references) <br>
-    14.1 [Other parts in our Project](#other-parts-in-our-project)
+    14.1 [Other projects in our virtual IT-enviroment](#other-projects-in-our-virtual-it-enviroment)
 <br>
 
 ## Introduction<br>
 **Welcome friend!** <br>
 _In this project we are going to deploy a container-based application using infrastructure-as-code (IaC), Ansible. Deployment of containers on two worker VMs, the application VM will serve as our runtime enviroment and the metrics VM serving as our metrics collector / Monitoring for that app, running Prometheus and Grafana. Everything will be managed from our management VM running Ansible. This will be done by configuring Ansible roles, and reusing those roles in playbooks. This is our fourth project <a href="https://github.com/rafaelurrutiasilva/Proxmox_on_Nuc/blob/main/Extra/Mermaid/Projects.md">in a series of projects</a> with the end goal of setting up a complete virtualized, automated, and monitored IT-Enviroment as a part of our internship on [The Swedish Meteorological and Hydrological Institute (SMHI)](https://www.smhi.se/en/about-smhi) IT-department at the headquarters in Norrköping. The second goal of these projects are also supposed to serve as a set-up guide here on Github for anyone and everyone that wants to replicate what we have done. we will link every project to each other aswell._ <br>
 
-_**[Other parts in our Project](#other-parts-in-our-project)**_ <br>
+_[Other projects in our virtual IT-enviroment](#other-projects-in-our-virtual-it-enviroment)_ <br>
 **<a href="https://github.com/Filipanderssondev">Filip Andersson</a> and <a href="https://github.com/JonatanHogild">Jonatan Högild</a>**
 <br>
 
@@ -348,11 +349,11 @@ Slutsats
 - [Dockerhub (public image repository](https://hub.docker.com/)
 - [Ansible structure](https://github.com/Filipanderssondev/Container_Stack_Deployment_With_Ansible/blob/main/Extra/Ansible_structure.md)
 
-### Other parts in our project
-- Part 1. [Proxmox_on_Nuc](https://github.com/rafaelurrutiasilva/Proxmox_on_Nuc)
-- Part 2. [Rocky_Linux_OS_Base_for_VMs](https://github.com/Filipanderssondev/Rocky_Linux_OS_Base_for_VMs)
-- Part 3. [Ansible_on_management_vm](https://github.com/JonatanHogild/Ansible_on_management_vm)
-- Part 4. [Podman_Compose_app_on_VMs](https://github.com/Filipanderssondev/Podman_Compose_app_on_VMs)
-- Part 5. [FreeIPA for virtual enviroment](https://github.com/JonatanHogild/FreeIPA_for_virtual_environment)
+### Other projects in our virtual IT-enviroment:
+- Project 1 - [Proxmox on Nuc](https://github.com/rafaelurrutiasilva/Proxmox_on_Nuc/)
+- Project 2 - [Rocky Linux golden image for cloning](https://github.com/Filipanderssondev/Rocky_Linux_OS_Base_for_VMs)
+- Project 3 - [Ansible on management VM](https://github.com/JonatanHogild/Ansible_on_management_vm)
+- Project 5 - [FreeIPA for Virtual Enviroment](https://github.com/JonatanHogild/FreeIPA_for_virtual_environment/)
+
 
 
