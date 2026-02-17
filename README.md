@@ -170,9 +170,9 @@ This is the logic for logging us in, using the module _containers.podman.podman_
 ~~~
 
 #### image pull role
-- Since some image paths varies, for example:
-	 _private-registry.com/myrepository/image:tag_
- 	 _private-registry.com/myrepository/manufacturer/image:tag_
+- Since some image paths varies, for example: <br>
+	 _private-registry.com/myrepository/image:tag_ <br>
+ 	 _private-registry.com/myrepository/manufacturer/image:tag_ <br>
 Its considered industry stabdard, and generally safer to create a mechanics for building the image name. 
 
 ##### Defaults file
