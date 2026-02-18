@@ -15,19 +15,19 @@ Container stack application Deployment and monitoring on virtual machines runnin
 
 1. [Introduction](#introduction)
 2. [Goals and Objectives](#goals-and-objectives) <br>
-4. [Method](#method)
-5. [Target Audience](#target-audience)
-6. [Document Status](#document-status)
-7. [Disclaimer](#disclaimer)
-8. [Scope and Limitations](#scope-and-limitations)
-9. [Environment](#environment)
-10. [Acknowledgments](#acknowledgments)
-11. [Implementation](#implementation) <br>
-    	11.1 [Creating the Ansible roles](#creating-the-ansible-roles) <br>
-		11.2 [Composing and running the playbooks](#composing-and-running-the-playbooks) <br>
-13. [Conclusion](#conclusion)
-14. [References](#references) <br>
-    14.1 [Other projects in our virtual IT-enviroment](#other-projects-in-our-virtual-it-enviroment)
+3. [Method](#method)
+4. [Target Audience](#target-audience)
+5. [Document Status](#document-status)
+6. [Disclaimer](#disclaimer)
+7. [Scope and Limitations](#scope-and-limitations)
+8. [Environment](#environment)
+9. [Acknowledgments](#acknowledgments)
+10. [Implementation](#implementation) <br>
+    	10.1 [Creating the Ansible roles](#creating-the-ansible-roles) <br>
+    	10.2 [Composing and running the playbooks](#composing-and-running-the-playbooks) <br>
+11. [Conclusion](#conclusion)
+12. [References](#references) <br>
+    12.1 [Other projects in our virtual IT-enviroment](#other-projects-in-our-virtual-it-enviroment)
 <br>
 
 ## Introduction<br>
