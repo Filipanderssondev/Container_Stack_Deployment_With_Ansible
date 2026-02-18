@@ -42,45 +42,11 @@ The goals and objectives of this project is:
 - Collect metrics from that app to the metrics VM, displaying it in Grafana.
 - Doing it all through Ansible on the management VM
 <br>
+This is part of a larger ongoing Infrastructure as Code (IaC) project that will use Proxmox as a base, with Rocky Linux as the OS running on each virtual machine. The goal of this project is to build a complete IT-environment and gain a deeper understanding of the underlying components and their part in a larger production chain.
 
 ## Method
 
 The solution was implemented using Ansible on a management VM to automate the deployment of a container-based application on virtual machines running Podman. The container stack consisted of NGINX (frontend) along with monitoring using container based Prometheus node exporters on each vm for exporting metrics, running Prometheus Grafana both as containers on the monitoring vm, configuring prometheus as a data source for Grafana to visualize the result. Reusable Ansible roles and playbooks were used to install dependencies, pull images, and start containers with defined ports and volumes. To collect the container images from the private image registry, an ansible login role was composed and implemented with the mechanics of fetching confidential login credentials defined in the encrypted vault file in our ansible structure.
-
-<!--
-
-- At first i approached with 
-As i described in the beginning im going run a container stack / application on the application vm, monitor that application and display the metrics on the metrics vm. I will manage everything through our control vm called Management through Ansible, using roles in playbooks.
-
-  **For the container stack i will run:**
-  - NGINX as frontend, displaying basic HTML/CSS
-  - Postgres as a database
-  - Python as backend
- 
-  **For monitoring i will run:**
-  - Prometheus
-  - Grafana
-  - Node-exporter on all vms as exporter
-
-Management VM:
- - Ansible roles
- - Ansible Playbooks
-
-Application VM
- - Running Podman as runtime enviroment
- - Running the application
-
-- We have our earlier projects as a foundation, [a Server running Proxmox](https://github.com/rafaelurrutiasilva/Proxmox_on_Nuc/tree/) and proxmox running [three replicated virtual machines from a Rocky Linux OS base](https://github.com/Filipanderssondev/Rocky_Linux_OS_Base_for_VMs) and [Ansible configuration on the management vm](https://github.com/JonatanHogild/Ansible_on_management_vm)
-
-<br>
-
-### 3.2 Ansible Roles configuration on Management VM
-For each role, i will create a deafults/main.yaml and a tasks/main.yaml as is the standard to have a defaults as fallback and a tasks/main.yaml to descrive how things will be executed, and in playbooks what will be executed. I choose to create reusable roles as it is less repetative then writing tasks in playbooks.
-
-- I will need a role for logging into the private registry
-- I will need a role for checking that enviroment tools like podman exists 
-- I will need a role who pulls images, run applications.
--->
 
 ## Target Audience
 - This repo is for anyone who wants a step-by-step guide on how to deploy a modern container stack based application and monitoring stack with Ansible.
