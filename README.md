@@ -83,8 +83,8 @@ For each role, i will create a deafults/main.yaml and a tasks/main.yaml as is th
 -->
 
 ## Target Audience
-- This repo is for anyone who wants a step-by-step guide on .
-This repo is also part of a larger project aimed at people interested in learning about IaC, and building such an environment from scratch. 
+- This repo is for anyone who wants a step-by-step guide on how to deploy a modern container stack based application and monitoring stack with Ansible.
+This repo is also part of a larger project aimed at people interested in learning about IT-infrastructure, and building such an environment from scratch. 
 <br><br>
 
 ## Document Status
@@ -107,7 +107,7 @@ This repo is also part of a larger project aimed at people interested in learnin
 - [See our foundation from earlier projects](###Our-other-projects)
 
 ## Acknowledgments
-Great thanks once again to our mentor [Rafael](https://github.com/rafaelurrutiasilva) and [Victor](https://github.com/ludd98) for helping with 
+Great thanks once again to our mentor [Rafael](https://github.com/rafaelurrutiasilva) for ongoing support and guidance. And thanks to [Victor](https://github.com/ludd98) for insight and guidance. 
 
 ## Implementation
 
