@@ -38,7 +38,7 @@ _[Other projects in our virtual IT-enviroment](#other-projects-in-our-virtual-it
 
 ## Goals and Objectives
 The goals and objectives of this project is: 
-- To run an application on the application VM, hosting it basic html
+- To run a container-based web application / full stack, with log in, displaying multiple interactive pages.
 - Collect metrics from that app to the metrics VM, displaying it in Grafana.
 - Doing it all through Ansible on the management VM
 <br>
@@ -46,8 +46,7 @@ This is part of a larger ongoing Infrastructure as Code (IaC) project that will 
 
 ## Method
 
-The solution was implemented using Ansible on a management virtual machine to automate the deployment of a container-based web application and monitoring on our virtual machines running Podman. The container stack consisted of NGINX (frontend) that served visual presentation, Postgres (Database) for storing users and logging in, and Rocky linux based python api (Backend) as our backend api handling http requests and responses. To serve diffrent pages in our web application, we constructed our own Cross-Origin-Recourse-Sharing function (CORS)
-
+The solution was implemented using Ansible on a management virtual machine to automate the deployment of a container-based web application and monitoring on our virtual machines running Podman. The container stack consisted of NGINX (frontend) that served visual presentation, Postgres (Database) for storing users and logging in, and Rocky linux based python api (Backend) as our backend api handling http requests and responses. To be able to serve multiple pages in the same window, we constructed our own Cross-Origin-Resource-Sharing (CORS) function, since we designed our system like most modern enterprises with restrictive access to the internet, we couldnt be reliant on external libraries in order for our backend to work.  
 along with monitoring using container based Prometheus node exporters on each vm for exporting metrics. Collection of the exported metrics was running Prometheus Grafana both as containers on the monitoring vm, configuring prometheus as a data source for Grafana to visualize the result. Reusable Ansible roles and playbooks were used to install dependencies, pull images from a private image reg start containers with defined ports and volumes. To collect the container images from the private image registry, an ansible login role was composed and implemented with the mechanics of fetching confidential login credentials defined in the encrypted vault file in our ansible structure.
 
 ## Target Audience
