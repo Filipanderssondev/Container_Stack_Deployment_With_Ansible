@@ -291,58 +291,243 @@ On the application vm
         └── style.css
 ```
 
-<!--
-#### On the management VM
-These are my frontend files: 
-
-#### index.HTML
+##### index.HTML
 ```html
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>My App</title>
-    <link rel="stylesheet" href="style.css">
+  <title>SMHI Praktikprojekt</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Welcome to My App!</h1>
-    <button id="clickBtn">Click Me</button>
-    <p id="message"></p>
+  <div class="card">
+    <h1>SMHI Praktikprojekt</h1>
+    <p class="subtitle">Enter the system</p>
 
-    <script src="script.js"></script>
+    <input id="username" placeholder="Username">
+    <button onclick="login()">ENTER</button>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
 ```
+
+##### about.html
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>About</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="card">
+    <h1 id="welcome"></h1>
+    <p>This system is deployed using containers, Ansible and Podman.</p>
+    <button onclick="goDiagram()">VIEW ARCHITECTURE</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+```
+
+##### diagram.html
+This page will serve our flowchart diagram.
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Architecture</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="card">
+    <h1>ARCHITECTURE</h1>
+    <img src="diagram.png" class="diagram">
+    <button onclick="goBack()">BACK</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+```
+
 #### style.CSS
 ```css
 body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    margin-top: 50px;
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-family: 'Segoe UI', sans-serif;
+  color: white;
+
+  background: radial-gradient(circle at top left, #1f1f1f, #000000);
+  animation: fadeIn 1.2s ease-in;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  padding: 50px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 0 40px rgba(255,255,255,0.1);
+  width: 400px;
+}
+
+h1 {
+  font-size: 3rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  opacity: 0.6;
+  margin-bottom: 30px;
+}
+
+input {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 20px;
+  border: none;
+  border-radius: 8px;
+  background: #111;
+  color: white;
+  font-size: 1rem;
 }
 
 button {
-    padding: 10px 20px;
-    font-size: 16px;
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1rem;
+  background: white;
+  color: black;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #00ffcc;
+  box-shadow: 0 0 20px #00ffcc;
+  transform: translateY(-2px);
+}
+
+.diagram {
+  max-width: 100%;
+  margin: 20px 0;
+  border-radius: 10px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 ```
 
 #### script.js
+This is the javascript that makes our web application interactive and will call our backend api
 ```javascript
-document.getElementById('clickBtn').addEventListener('click', function() {
-    document.getElementById('message').innerText = "You clicked the button!";
-});
+const api = "http://" + window.location.hostname + ":5000";
+
+function login() {
+  const username = document.getElementById("username").value;
+
+  fetch(api + "/login", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({ username })
+  })
+  .then(() => {
+    localStorage.setItem("user", username);
+    window.location.href = "about.html";
+  });
+}
+
+window.onload = function () {
+  const welcome = document.getElementById("welcome");
+  if (welcome) {
+    const user = localStorage.getItem("user");
+    welcome.textContent = "WELCOME, " + user.toUpperCase();
+  }
+};
+
+function goDiagram() {
+  window.location.href = "diagram.html";
+}
+
+function goBack() {
+  window.location.href = "about.html";
+}
 ```
-then i just send them to where i want them. The "-r" means recursivly, so this goes for every folder in the parent folder.
-```bash
-spc -r /home/Filip/projects/frontend filip@10.208.12.103:/home/Filip/app_projects/frontend
+### Backend and DB
+
+#### Backend
+
+Since we designed our system like an enterprise enviroment with limited access towards the internet, we could not be depended on external python libraries for our images to work. This is why we based our python backend container off of Rocky Linux because we already have access to internal package repositorys using dnf. We had access to _python3-flask_ but not the _python3-cors_ dependency, making the display of multiple web pages in the same window possible so we had to construct our own Cross-Origin-Resource_Sharing (CORS) in app.py under _def login()_ 
+
+##### app.py
+```python
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
+@app.route("/login", methods=["POST", "OPTIONS"])
+def login():
+    if request.method == "OPTIONS":
+        response = app.make_response("")
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+        return response
+
+    data = request.json
+    username = data.get("username")
+    response = jsonify({"message": f"Welcome {username}!"})
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    return response
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
 ```
 
-### Composing and running the playbooks
+##### Dockerfile
+And our Dockerfile for building the backend image, with Rocky Linux as a base image. We used the dnf repo configs from the vm and copied it to the container. 
+```Dockerfile
+FROM private-registry.com/repository/rockylinux:10-ubi-init
 
-### db and Backend
+COPY dnf-repos/yum.repos.d /etc/yum.repos.d
 
--->
+RUN dnf install -y \
+    python3 \
+    python3-flask \
+    python3-psycopg2 \
+    python3-dotenv \
+    && dnf clean all
+
+WORKDIR /app
+
+COPY . .
+
+EXPOSE 5000
+
+CMD ["python3", "app.py"]
+```
+
+#### Database
+
+
 
 ## Conclusion
 Slutsats
