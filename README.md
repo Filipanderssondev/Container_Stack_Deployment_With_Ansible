@@ -46,9 +46,7 @@ This is part of a larger ongoing Infrastructure as Code (IaC) project that will 
 
 ## Method
 
-The solution was implemented using Ansible on a management virtual machine to automate the deployment of a container-based web application and monitoring on virtual machines running Podman. The container stack consisted of NGINX (frontend) that served visual presentation, Postgres (Database) for storing users and logging in, and Rocky linux based python api (Backend) as our backend api handling http requests and responses. To be able to serve multiple pages in the same window, a custom constructed our own Cross-Origin-Resource-Sharing (CORS) function, since we designed our system like most modern enterprises with restrictive access to the internet, 
-
-along with monitoring using container based Prometheus node exporters on each vm for exporting metrics. Collection of the exported metrics was running Prometheus Grafana both as containers on the monitoring vm, configuring prometheus as a data source for Grafana to visualize the result. Reusable Ansible roles and playbooks were used to install dependencies, pull images from a private image reg start containers with defined ports and volumes. To collect the container images from the private image registry, an ansible login role was composed and implemented with the mechanics of fetching confidential login credentials defined in the encrypted vault file in our ansible structure.
+The solution was implemented using Ansible on a management virtual machine to automate the deployment of a container-based web application and monitoring on virtual on two machines running Podman. The container stack consisted of NGINX (frontend) that served visual presentation, Postgres (Database) for storing users and logging in, and Rocky linux based python api (Backend) as our backend api handling http requests and responses. To be able to serve multiple pages in the same window, a custom Cross-Origin-Resource-Sharing (CORS) function was created inside the backend api, since the inviroment is designed like most modern enterprises with restrictive access to the internet the containers couldn't be reliant on external python libraries and packages websites, instead a custom Rocky Linux based image was constructed using dnf as package handler, with access to internal package repositorys. The stack also consist of monitoring using container based Prometheus node exporters on each vm for exporting metrics configuring prometheus to collect metrics from the node exporters and prometheus as a data source for Grafana to visualize the result. Reusable Ansible roles and playbooks were used to install dependencies, pull images from a private image reg start containers with defined ports and volumes. To collect the container images from the private image registry, an ansible login role was composed and implemented with the mechanics of fetching confidential login credentials defined in the encrypted vault file in our ansible structure.
 
 ## Target Audience
 - This repo is for anyone who wants a step-by-step guide on how to deploy a modern container stack based application and monitoring stack with Ansible.
@@ -268,9 +266,10 @@ Since the kill role is partially off the show role but with some tweaks its redu
 
 ### The stack
 
-What we want is to be able to log into our container based website, and we want our frontend to display something that speaks for what this is about with multiple pages, in this case we want it to speak about that this is our intern project at SMHI and a some information on our enviroment with diagrams.   
+What we want is to be able to log into our container based website, and we want our frontend to display something that speaks for what this is about with multiple pages, in this case we want it to speak about that this is our intern project at SMHI and a some information on our enviroment with diagrams. 
 
 #### Structure
+On the application vm
 ```bash
 └── app-praktik-projekt
     ├── backend
@@ -278,9 +277,6 @@ What we want is to be able to log into our container based website, and we want 
     │   ├── dnf-repos
     │   │   └── yum.repos.d
     │   │       ├── epel.repo
-    │   │       ├── epel-testing.repo
-    │   │       ├── rocky-addons.repo
-    │   │       ├── rocky-devel.repo
     │   │       ├── rocky-extras.repo
     │   │       └── rocky.repo
     │   └── Dockerfile
