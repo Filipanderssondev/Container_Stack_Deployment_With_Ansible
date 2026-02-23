@@ -71,7 +71,7 @@ This repo is also part of a larger project aimed at people interested in learnin
 
 ## Environment
 - [See our foundation from earlier projects](###Our-other-projects)
-
+1
 ## Acknowledgments
 Great thanks once again to our mentor [Rafael](https://github.com/rafaelurrutiasilva) for ongoing support and guidance. And thanks to [Victor](https://github.com/ludd98) for insight and guidance. 
 
@@ -84,11 +84,7 @@ Every config file is available under the [code directory](https://github.com/Fil
 
 ### Configuring reusable roles
 
-What we need is:
-- A role for installing/Checking dependencies like Podman
-- A role for logging in to the private registry, fetching the credentials in our encryoted vault file
-- A role for pulling images, the necisarry images on each machine
-- A role for creating and running the containers, with a defaults file (for defining our variables), and a tasks file for the logic.
+What we want is resuable roles for repetetive tasks. We want a role for checking/installing latest versions of depencencies like Podman, we want a role that logs in to our private registry fetching our credentials from our encrypted vault file, We want a role for pulling images, and we want a role for running images acting as the whole container logic, our "engine" if you will. Each role will have a defaults folder with a main.yaml file and a tasks folder with a main.yaml file. All variables will be pre defined in our defaults/main as a standard fallback as is the best practice to never hardcode anything. Each tasks/main will contain the modules and define the logic for the tasks. Then, we want a role that shows running containers and a role for killing and removing containers, because it is quite a process to do manually for each container when we want to test our containers and such.
 
 #### The dependencies installation role
 Very straight forward basic. The key to every task in ansible playbooks or roles is the use of ansible modules, like the _ansible.builtin.dnf_ which allows the use of dnf package manager.
@@ -106,16 +102,14 @@ Very straight forward basic. The key to every task in ansible playbooks or roles
 ~~~
 <br>
 
-
 #### Login role
 
-##### Defaults file
+##### defaults/main.yaml
 
-As the registry URL isnt as sensitive information as my                                   
-user credentials, its considered best practice to have it  
-in my defaults main and not our encrypted vault file
+As the registry URL isnt as sensitive information as our                                   
+user credentials, its generally considered best practice to define it in our defaults and not our encrypted vault file
 
-Out of necesity i need to have the tls verify false, i had many issues with certificate suthentivation on the vms so it is easier to do it like this so it dosent fail
+Out of necesity we to have the tls verify set to false, we ran into a lot of complications with certificate authentication on the vms so it is easier to do it like this so it dosent fail.
 ~~~yaml
 ---
 #Default image registry
@@ -123,8 +117,8 @@ registry_url: "www.private-container-registry.com/myrepository"  # Dummy value f
 tlsverify: tls-verify=false
 ~~~
 
-##### tasks file
-This is the logic for logging us in, using the module _containers.podman.podman_login_. Here im referring to the variables in my encrypted vault file. This is considered best practice.
+##### tasks/main.yaml
+This is the logic for logging us in, using the module _containers.podman.podman_login_. Here im referring to the variables defined in our encrypted vault file.
 
 ~~~yaml
 - name: Login to private-registry
@@ -139,9 +133,9 @@ This is the logic for logging us in, using the module _containers.podman.podman_
 - Since some image paths varies, for example: <br>
 	 _private-registry.com/myrepository/image:tag_ <br>
  	 _private-registry.com/myrepository/manufacturer/image:tag_ <br>
-Its considered industry stabdard, and generally safer to create a mechanics for building the image name. 
+Its safer to create a mechanics for building the complete image name. Defining our default values in defaults and then overriding in pur playbooks, never hardcoding anything. 
 
-##### Defaults file
+##### defaults/main.yaml
 ~~~yaml
 ---
 default_registry: "private-registry.com/repository"
@@ -152,8 +146,8 @@ default_tag: "latest"
 tlsverify: false
 ~~~
 
-##### Tasks file
-This is the mechanics for the image name builder, For each image in a list, it builds the full image name (registry, optional manufacturer, image name, and version tag). If a version is not specified, it uses a default fallback value defined in the defaults file.
+##### tasks/main.yaml
+This is the mechanics for the image name builder, since we often want to pull multiple images we want to treat each image as an item in a list we overrode in our define in our playbook. This task runs once per item, tach image is treated as an item in a list, it builds the full image name (registry, optional manufacturer, image name, and version tag).
 ~~~yaml
 ---
 - name: Pull container images
@@ -170,12 +164,136 @@ This is the mechanics for the image name builder, For each image in a list, it b
     state: present
 ~~~
 
-#####
+#### Container run role
 
-### Deploying the frontend to the application VM
+##### defaults/main.yaml
+~~~yaml
+---
+#Default value for variables, whats the image to run + name of new container
 
-I want to display some basic HTML/CSS/JS on in my frontend container, so i compose basic web files, and since im only going to do this once theres no need to create an entire play for it. So i just send them to my desired directory on the application vm.
+# Default container registry
+default_registry: "private-registry.com"
+default_project: "project"
+manufacturer: " "
+image_name: my-image
+tag: "latest"
+container_name: my-container
 
+#Desired container state / absent
+container_state: started
+
+#Additional settings for later
+container_ports: []
+container_env_vars: {}
+container_volumes: []
+container_restart_policy: always
+container_cmd: []
+container_network: " "
+tls_verification: false
+~~~
+
+##### tasks/main.yaml
+~~~yaml
+---
+- name: Run container
+  containers.podman.podman_container:
+    name: "{{ container_name }}"
+    image: "{{ default_registry }}/{{ default_project }}{% if manufacturer is defined and manufacturer | trim != '' %}/{{ manufacturer }}{% endif %}/{{ image_name }}:{{ tag }}"
+    state: "{{ container_state  }}"
+    ports: "{{ container_ports | default(omit)  }}"
+    env: "{{ container_env_vars  }}"
+    volumes: "{{ container_volumes | default(omit) }}"
+    restart_policy: "{{ container_restart_policy | default('always') }}"
+    user: 0
+    command: "{{ container_cmd | default([]) }}"
+    tls_verify: "{{ tls_verification | default }}"
+    network: "{{ container_network | default(omit) }}"
+~~~
+
+
+#### Show containers
+
+This role is very simple so we dont need default values per say so we only go with tasks for this one.
+
+##### tasks/main.yaml
+~~~yaml
+---
+- name: Get all container names
+  command: sudo podman ps -a --format "{{'{{'}}.Names{{'}}'}}"
+  register: container_names
+  changed_when: false
+
+- name: Show container names
+  debug:
+    msg: "Container found: {{ item }}"
+  loop: "{{ container_names.stdout_lines }}"
+  when: container_names.stdout != ""
+
+~~~
+
+#### Container kill role
+
+Since the kill role is partially off the show role but with some tweaks its redundant to use defaults here aswell.
+
+##### tasks/main.yaml
+~~~yaml
+---
+- name: Get all container names
+  command: podman ps -a --format "{{'{{'}}.Names{{'}}'}}"
+  register: container_names
+  changed_when: false
+
+- name: Show container names
+  debug:
+    msg: "Container found: {{ item }}"
+  loop: "{{ container_names.stdout_lines }}"
+  when: container_names.stdout != ""
+
+- name: Stop all containers
+  command: podman stop {{ item }}
+  loop: "{{ container_names.stdout_lines }}"
+  ignore_errors: true
+  when: container_names.stdout != ""
+
+- name: Remove all containers
+  command: podman rm -f {{ item }}
+  loop: "{{ container_names.stdout_lines }}"
+  ignore_errors: true
+  when: container_names.stdout != ""
+~~~
+
+<br>
+
+### The stack
+
+What we want is to be able to log into our container based website, and we want our our frontend to display something that speaks for what this is about with multiple pages, in this case that this is our intern project at SMHI and a some information on our enviroment with diagrams.   
+
+#### Structure
+```bash
+└── app-praktik-projekt
+    ├── backend
+    │   ├── app.py
+    │   ├── dnf-repos
+    │   │   └── yum.repos.d
+    │   │       ├── epel.repo
+    │   │       ├── epel-testing.repo
+    │   │       ├── rocky-addons.repo
+    │   │       ├── rocky-devel.repo
+    │   │       ├── rocky-extras.repo
+    │   │       └── rocky.repo
+    │   └── Dockerfile
+    ├── db
+    │   └── init.sql
+    └── frontend
+        ├── about.html
+        ├── diagram.html
+        ├── diagram.png
+        ├── index.html
+        ├── script.js
+        └── style.css
+```
+
+<!--
 #### On the management VM
 These are my frontend files: 
 
@@ -221,8 +339,11 @@ then i just send them to where i want them. The "-r" means recursivly, so this g
 ```bash
 spc -r /home/Filip/projects/frontend filip@10.208.12.103:/home/Filip/app_projects/frontend
 ```
-<!--
+
 ### Composing and running the playbooks
+
+### db and Backend
+
 -->
 
 ## Conclusion
