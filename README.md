@@ -32,7 +32,7 @@ Container stack application Deployment and monitoring on virtual machines runnin
 
 ## Introduction<br>
 **Welcome friend!** <br>
-_In this project we are going to deploy a container-based application using infrastructure-as-code (IaC), Ansible. Deployment of containers on two worker VMs, the application VM will serve as our runtime enviroment and the metrics VM serving as our metrics collector / Monitoring for that app, running Prometheus and Grafana. Everything will be managed from our management VM running Ansible. This will be done by configuring Ansible roles, and reusing those roles in playbooks. This is our fourth project <a href="https://github.com/rafaelurrutiasilva/Proxmox_on_Nuc/blob/main/Extra/Mermaid/Projects.md">in a series of projects</a> with the end goal of setting up a complete virtualized, automated, and monitored IT-Enviroment as a part of our internship on [The Swedish Meteorological and Hydrological Institute (SMHI)](https://www.smhi.se/en/about-smhi) IT-department at the headquarters in Norrköping. The second goal of these projects are also supposed to serve as a set-up guide here on Github for anyone and everyone that wants to replicate what we have done. we will link every project to each other aswell._ <br>
+_In this project we are going to deploy a container-based interactive web application using infrastructure-as-code (IaC), Ansible. We will deploy the fullstack containers on our application VM that will serve as our runtime enviroment and the monitoring containers on our metrics VM serving as our metrics collector. Everything will be managed from our management VM running Ansible. This will be done by configuring Ansible roles, and reusing those roles in playbooks. This is our fourth project <a href="https://github.com/rafaelurrutiasilva/Proxmox_on_Nuc/blob/main/Extra/Mermaid/Projects.md">in a series of projects</a> with the end goal of setting up a complete virtualized, automated, and monitored IT-Enviroment as a part of our internship on [The Swedish Meteorological and Hydrological Institute (SMHI)](https://www.smhi.se/en/about-smhi) IT-department at the headquarters in Norrköping. The second goal of these projects are also supposed to serve as a set-up guide here on Github for anyone and everyone that wants to replicate what we have done. we will link every project to each other aswell._ <br>
 
 _[Other projects in our virtual IT-enviroment](#other-projects-in-our-virtual-it-enviroment)_
 
@@ -46,7 +46,9 @@ This is part of a larger ongoing Infrastructure as Code (IaC) project that will 
 
 ## Method
 
-The solution was implemented using Ansible on a management VM to automate the deployment of a container-based application on virtual machines running Podman. The container stack consisted of NGINX (frontend) along with monitoring using container based Prometheus node exporters on each vm for exporting metrics, running Prometheus Grafana both as containers on the monitoring vm, configuring prometheus as a data source for Grafana to visualize the result. Reusable Ansible roles and playbooks were used to install dependencies, pull images, and start containers with defined ports and volumes. To collect the container images from the private image registry, an ansible login role was composed and implemented with the mechanics of fetching confidential login credentials defined in the encrypted vault file in our ansible structure.
+The solution was implemented using Ansible on a management virtual machine to automate the deployment of a container-based web application and monitoring on our virtual machines running Podman. The container stack consisted of NGINX (frontend) that served visual presentation, Postgres (Database) for storing users and logging in, and Rocky linux based python api (Backend) as our backend api handling http requests and responses. To serve diffrent pages in our web application, we constructed our own Cross-Origin-Recourse-Sharing function (CORS)
+
+along with monitoring using container based Prometheus node exporters on each vm for exporting metrics. Collection of the exported metrics was running Prometheus Grafana both as containers on the monitoring vm, configuring prometheus as a data source for Grafana to visualize the result. Reusable Ansible roles and playbooks were used to install dependencies, pull images from a private image reg start containers with defined ports and volumes. To collect the container images from the private image registry, an ansible login role was composed and implemented with the mechanics of fetching confidential login credentials defined in the encrypted vault file in our ansible structure.
 
 ## Target Audience
 - This repo is for anyone who wants a step-by-step guide on how to deploy a modern container stack based application and monitoring stack with Ansible.
@@ -266,7 +268,7 @@ Since the kill role is partially off the show role but with some tweaks its redu
 
 ### The stack
 
-What we want is to be able to log into our container based website, and we want our our frontend to display something that speaks for what this is about with multiple pages, in this case that this is our intern project at SMHI and a some information on our enviroment with diagrams.   
+What we want is to be able to log into our container based website, and we want our frontend to display something that speaks for what this is about with multiple pages, in this case we want it to speak about that this is our intern project at SMHI and a some information on our enviroment with diagrams.   
 
 #### Structure
 ```bash
