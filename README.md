@@ -4,7 +4,7 @@
 
 **Container Stack Deployment With Ansible**
 <br>**Authors:** _<a href="https://github.com/Filipanderssondev">Filip Andersson</a> and <a href="https://github.com/JonatanHogild">Jonatan Högild</a>_<br>
-Publiceringsdatum<br>
+24-02-2026<br>
 <br>
 
 ## Abstract
