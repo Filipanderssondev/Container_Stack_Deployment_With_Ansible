@@ -8,7 +8,7 @@
 <div>
   <img src="https://github.com/Filipanderssondev/Container_Stack_Deployment_With_Ansible/blob/main/Extra/container-stack-deployment.png" width="300" align="left" />
 
-  <p style="margin-top: 1000px;">
+  <p>
     <strong>Container Stack Deployment With Ansible</strong>
 	<br>
     <strong>Authors:</strong>
@@ -310,16 +310,26 @@ On the application vm
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
   <title>SMHI Praktikprojekt</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="card">
-    <h1>SMHI Praktikprojekt</h1>
-    <p class="subtitle">Enter the system</p>
 
-    <input id="username" placeholder="Username">
-    <button onclick="login()">ENTER</button>
+    <h1>
+      <span class="bold-part">SMHI</span>
+      Praktikprojekt 
+    </h1>
+
+    <p class="subtitle">ENTER</p>
+
+    <form id="loginForm">
+      <input id="username" placeholder="Username" required>
+      <input id="password" type="password" placeholder="Password" required>
+      <button type="submit">Login</button>
+    </form>
+
   </div>
 
   <script src="script.js"></script>
@@ -336,6 +346,10 @@ On the application vm
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <script>
+    const user = localStorage.getItem("user");
+    if (!user) window.location.href = "/";
+  </script>
   <div class="card">
     <h1 id="welcome"></h1>
     <p>This system is deployed using containers, Ansible and Podman.</p>
@@ -345,7 +359,6 @@ On the application vm
   <script src="script.js"></script>
 </body>
 </html>
-
 ```
 
 ##### diagram.html
@@ -358,6 +371,10 @@ This page will serve our flowchart diagram.
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <script>
+    const user = localStorage.getItem("user");
+    if (!user) window.location.href = "/";
+  </script>
   <div class="card">
     <h1>ARCHITECTURE</h1>
     <img src="diagram.png" class="diagram">
@@ -367,11 +384,23 @@ This page will serve our flowchart diagram.
   <script src="script.js"></script>
 </body>
 </html>
-
 ```
 
 #### style.CSS
 ```css
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-family: 'Segoe UI', sans-serif;
+  color: white;
+
+  background: radial-gradient(circle at top left, #1f1f1f, #000000);
+  animation: fadeIn 1.2s ease-in;
+}
 body {
   margin: 0;
   height: 100vh;
@@ -457,18 +486,41 @@ const api = "http://" + window.location.hostname + ":5000";
 
 function login() {
   const username = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
+
+  if (!username || !password) {
+    alert("Enter username and password");
+    return;
+  }
 
   fetch(api + "/login", {
     method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({ username })
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username, password })
   })
-  .then(() => {
+  .then(response => {
+    if (!response.ok) {
+      return response.json().then(data => { throw new Error(data.message); });
+    }
+    return response.json();
+  })
+  .then(data => {
     localStorage.setItem("user", username);
     window.location.href = "about.html";
+  })
+  .catch(error => {
+    alert(error.message);
+    console.error("Login error:", error);
   });
 }
 
+// Handle Enter key / form submit
+document.getElementById("loginForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  login();
+});
+
+// Display welcome message
 window.onload = function () {
   const welcome = document.getElementById("welcome");
   if (welcome) {
@@ -477,13 +529,9 @@ window.onload = function () {
   }
 };
 
-function goDiagram() {
-  window.location.href = "diagram.html";
-}
-
-function goBack() {
-  window.location.href = "about.html";
-}
+// Navigation
+function goDiagram() { window.location.href = "diagram.html"; }
+function goBack() { window.location.href = "about.html"; }
 ```
 ### Backend and DB
 
@@ -493,24 +541,71 @@ Since we designed our system like an enterprise enviroment with limited access t
 
 ##### app.py
 ```python
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, make_response
+import psycopg2
+import os
 
 app = Flask(__name__)
 
+# Database connection
+def get_connection():
+    return psycopg2.connect(
+        host=os.getenv("DB_HOST"),
+        database=os.getenv("DB_NAME"),
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASSWORD")
+    )
+
+# Global CORS handler
+@app.after_request
+def add_cors_headers(response):
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+    return response
+
+#Login route
 @app.route("/login", methods=["POST", "OPTIONS"])
 def login():
-    if request.method == "OPTIONS":
-        response = app.make_response("")
-        response.headers["Access-Control-Allow-Origin"] = "*"
-        response.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
-        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
-        return response
 
-    data = request.json
+    # Handle browser preflight request
+    if request.method == "OPTIONS":
+        return make_response("", 200)
+
+    data = request.get_json()
+
+    if not data:
+        return jsonify({"message": "Invalid request"}), 400
+
     username = data.get("username")
-    response = jsonify({"message": f"Welcome {username}!"})
-    response.headers["Access-Control-Allow-Origin"] = "*"
-    return response
+    password = data.get("password")
+
+    if not username or not password:
+        return jsonify({"message": "Missing credentials"}), 400
+
+    try:
+        conn = get_connection()
+        cur = conn.cursor()
+
+        cur.execute(
+            "SELECT 1 FROM users WHERE username = %s AND password = %s",
+            (username, password)
+        )
+
+        user = cur.fetchone()
+
+        cur.close()
+        conn.close()
+
+        if user:
+            return jsonify({"message": "Login successful"}), 200
+        else:
+            return jsonify({"message": "Invalid credentials"}), 401
+
+    except Exception as e:
+        print("Database error:", e)
+        return jsonify({"message": "Server error"}), 500
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
@@ -541,6 +636,21 @@ CMD ["python3", "app.py"]
 
 #### Database
 
+The database will be defined in our playbook however for our database we want to create a table called users, note that init.sql will only run once - initiating the table. 
+
+##### db/init.sql
+```sql
+CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY,
+    username TEXT UNIQUE NOT NULL,
+    password TEXT NOT NULL
+);
+
+INSERT INTO users (username, password) VALUES
+('filip', 'secretPasswordExmple1'),
+('jonatan', 'secretPasswordExample2')
+ON CONFLICT (username) DO NOTHING;
+```
 
 
 ## Conclusion
