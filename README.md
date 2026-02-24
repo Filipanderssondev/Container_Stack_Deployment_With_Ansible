@@ -1,7 +1,25 @@
 # Container Stack Deployment With Ansible 
-<img width="200" src="https://github.com/Filipanderssondev/Container_Stack_Deployment_With_Ansible/blob/main/Extra/container-stack-deployment.png" allign=left> **Container Stack Deployment With Ansible** <br> **Authors:** _<a href="https://github.com/Filipanderssondev">Filip Andersson</a> and <a href="https://github.com/JonatanHogild">Jonatan Högild</a>_<br>
-24-02-2026<br>
-<br>
+<!--
+<img width="200" src="https://github.com/Filipanderssondev/Container_Stack_Deployment_With_Ansible/blob/main/Extra/container-stack-deployment.png" allign="left"> **Container Stack Deployment With Ansible** <br>
+**Authors:** _<a href="https://github.com/Filipanderssondev">Filip Andersson</a> and <a href="https://github.com/JonatanHogild">Jonatan Högild</a>_ <br>
+24-02-2026 <br clear="left"/>
+-->
+
+<div>
+  <img src="https://github.com/Filipanderssondev/Container_Stack_Deployment_With_Ansible/blob/main/Extra/container-stack-deployment.png" width="200" align="left" />
+
+  <p style="margin-top: 1000px;">
+    <strong>Container Stack Deployment With Ansible</strong>
+	<br>
+    <strong>Authors:</strong>
+    <i><a href="https://github.com/Filipanderssondev">Filip Andersson</a></i>
+    and
+    <i><a href="https://github.com/JonatanHogild">Jonatan Högild</a></i>
+    <br>
+    24-02-2026
+    <br clear="left"/>
+  </p>
+</div>
 
 ## Abstract
 Container stack application Deployment and monitoring on virtual machines running Podman, Managed by Ansible.
