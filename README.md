@@ -6,7 +6,7 @@
 -->
 
 <div>
-  <img src="https://github.com/Filipanderssondev/Container_Stack_Deployment_With_Ansible/blob/main/Extra/container-stack-deployment.png" width="200" align="left" />
+  <img src="https://github.com/Filipanderssondev/Container_Stack_Deployment_With_Ansible/blob/main/Extra/container-stack-deployment.png" width="300" align="left" />
 
   <p style="margin-top: 1000px;">
     <strong>Container Stack Deployment With Ansible</strong>
