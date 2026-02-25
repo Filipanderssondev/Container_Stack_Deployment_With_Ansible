@@ -37,8 +37,9 @@
 8. [Environment](#environment)
 9. [Acknowledgments](#acknowledgments)
 10. [Implementation](#implementation) <br>
-    	10.1 [Creating the Ansible roles](#creating-the-ansible-roles) <br>
-    	10.2 [Composing and running the playbooks](#composing-and-running-the-playbooks) <br>
+        10.1 [Configuring reusable roles](#configuring-reusable-roles) <br>
+    	10.2 [The stack](#the-stack) <br>
+		10.3 [Backend and DB](#backend-and-db) <br>
 11. [Conclusion](#conclusion)
 12. [References](#references) <br>
     12.1 [Other projects in our virtual IT-enviroment](#other-projects-in-our-virtual-it-enviroment)
@@ -46,7 +47,7 @@
 
 ## Introduction<br>
 **Welcome friend!** <br>
-_In this project we are going to deploy a container-based interactive web application using infrastructure-as-code (IaC), Ansible. We will deploy the fullstack containers on our application VM that will serve as our runtime enviroment and the monitoring containers on our metrics VM serving as our metrics collector. Everything will be managed from our management VM running Ansible. This will be done by configuring Ansible roles, and reusing those roles in playbooks. This is our fourth project <a href="https://github.com/rafaelurrutiasilva/Proxmox_on_Nuc/blob/main/Extra/Mermaid/Projects.md">in a series of projects</a> with the end goal of setting up a complete virtualized, automated, and monitored IT-Enviroment as a part of our internship on [The Swedish Meteorological and Hydrological Institute (SMHI)](https://www.smhi.se/en/about-smhi) IT-department at the headquarters in Norrköping. The second goal of these projects are also supposed to serve as a set-up guide here on Github for anyone and everyone that wants to replicate what we have done. we will link every project to each other aswell._ <br>
+In this project we are going to deploy a container-based interactive web application using infrastructure-as-code (IaC), Ansible. We will deploy the fullstack containers on our application VM that will serve as our runtime enviroment and the monitoring containers on our metrics VM serving as our metrics collector. Everything will be managed from our management VM running Ansible. This will be done by configuring Ansible roles, and reusing those roles in playbooks. This is our fourth project <a href="https://github.com/rafaelurrutiasilva/Proxmox_on_Nuc/blob/main/Extra/Mermaid/Projects.md">in a series of projects</a> with the end goal of setting up a complete virtualized, automated, and monitored IT-Enviroment as a part of our internship on [The Swedish Meteorological and Hydrological Institute (SMHI)](https://www.smhi.se/en/about-smhi) IT-department at the headquarters in Norrköping. The second goal of these projects are also supposed to serve as a set-up guide here on Github for anyone and everyone that wants to replicate what we have done. we will link every project to each other aswell.<br>
 
 _[Other projects in our virtual IT-enviroment](#other-projects-in-our-virtual-it-enviroment)_
 
@@ -56,36 +57,68 @@ The goals and objectives of this project is:
 - Collect metrics from that app to the metrics VM, displaying it in Grafana.
 - Doing it all through Ansible on the management VM
 <br>
-This is part of a larger ongoing Infrastructure as Code (IaC) project that will use Proxmox as a base, with Rocky Linux as the OS running on each virtual machine. The goal of this project is to build a complete IT-environment and gain a deeper understanding of the underlying components and their part in a larger production chain.
+This is part of a larger ongoing IT-infrastructure project that will use Proxmox as a base, with Rocky Linux as the OS running on each virtual machine. The goal of this project is to build a complete IT-environment and gain a deeper understanding of the underlying components and their part in a larger production chain.
+
+## Scope and Limitations
+* The scope is inteded to serve as an internship project and learning opportunity when it comes to working with containers, and to run applications on our virtual machines with redundance.
+* This guide is not intended for production-grade, multi-node clusters or advanced HA setups.
+* Hardware compatibility varies; If unsure, check <a href=>hardware requirements</a> before proceeding.
+* Instructions may become outdated as software updates; always verify with the official documentation.
+* Sensitive information will be withheld. This will not hinder participation in the guide.
 
 ## Method
 
 The solution was implemented using Ansible on a management virtual machine to automate the deployment of a container-based web application and monitoring on virtual on two machines running Podman. The container stack consisted of NGINX (frontend) that served visual presentation, Postgres (Database) for storing users and logging in, and Rocky linux based python api (Backend) as our backend api handling http requests and responses. To be able to serve multiple pages in the same window, a custom Cross-Origin-Resource-Sharing (CORS) function was created inside the backend api, since the inviroment is designed like most modern enterprises with restrictive access to the internet the containers couldn't be reliant on external python libraries and packages websites, instead a custom Rocky Linux based image was constructed using dnf as package handler, with access to internal package repositorys. The stack also consist of monitoring using container based Prometheus node exporters on each vm for exporting metrics configuring prometheus to collect metrics from the node exporters and prometheus as a data source for Grafana to visualize the result. Reusable Ansible roles and playbooks were used to install dependencies, pull images from a private image reg start containers with defined ports and volumes. To collect the container images from the private image registry, an ansible login role was composed and implemented with the mechanics of fetching confidential login credentials defined in the encrypted vault file in our ansible structure.
 
 ## Target Audience
-- This repo is for anyone who wants a step-by-step guide on how to deploy a modern container stack based application and monitoring stack with Ansible.
-This repo is also part of a larger project aimed at people interested in learning about IT-infrastructure, and building such an environment from scratch. 
+- This repo is for anyone who wants a step-by-step guide on how to deploy a modern container stack based application and monitoring stack with Ansible and Podman.
+This repo is also part of a larger project aimed at people interested in learning about IT infrastructure, and building such an environment from scratch. 
 <br><br>
 
 ## Document Status
-> [!NOTE]  
-> This is an ongoing work right now
+This repository is considered complete and officially published.<br>
+Future improvements, refinements, or corrections may be introduced through controlled updates. Any changes will be versioned and documented in the commit history.
 
 ## Disclaimer
 > [!CAUTION]
 > This is intended for learning, testing, and experimentation. The emphasis is not on security or creating an operational environment suitable for production. 
 
 ## Scope and Limitations
-
-### Scope
-- The scope is inteded to serve as an internship project and learning oppertunity when it comes to working with containers, and to run applications on our virtual machines with redundance
-
-### Limitations
-- Naturally we have strict limitations for what we can specify and not. We only specfify public information and our general approach.
+* The scope is inteded to serve as an internship project and learning opportunity when it comes to working with containers, and to run applications on our virtual machines with redundance.
+* This guide is not intended for production-grade, multi-node clusters or advanced HA setups.
+* Hardware compatibility varies; If unsure, check <a href=>hardware requirements</a> before proceeding.
+* Instructions may become outdated as software updates; always verify with the official documentation.
+* Sensitive information will be withheld. This will not hinder participation in the guide.
 
 ## Environment
-- [See our foundation from earlier projects](###Our-other-projects)
-1
+ - Asus PN64 ax210NGW
+   - Intel® Core™ i7-12700H 
+   - 1TB disk
+   - 64 GB memory
+ - FreeIPA (4.12.2)
+ - Proxmox VE (9.1.1)
+ - Rocky Linux (10.1)
+ - Ansible (core 2.16.14)
+ - Podman (5.6.0)
+
+### Packages
+ - python3
+ - python3-flask
+ - python3-psycopg2
+ - python3-dotenv
+
+### Images
+ _creator(if)/image-name:verison_tag_
+ - custom built image (rocky_flask_backend:latest)
+ - rocky linux (rockylinux:10-ubi-init)
+ - postgres (postgres:latest)
+ - cadvisor (google/cadvisor:latest)
+ - node-exporter (prom/node-exporter:latest)
+ - Prometheus (prom/prometheus:main)
+ - grafana (grafana:alpine-3.22.2)
+ - nginx (nginx:1.29.4)
+
+
 ## Acknowledgments
 Great thanks once again to our mentor [Rafael](https://github.com/rafaelurrutiasilva) for ongoing support and guidance. And thanks to [Victor](https://github.com/ludd98) for insight and guidance. 
 
