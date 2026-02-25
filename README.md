@@ -59,13 +59,6 @@ The goals and objectives of this project is:
 <br>
 This is part of a larger ongoing IT-infrastructure project that will use Proxmox as a base, with Rocky Linux as the OS running on each virtual machine. The goal of this project is to build a complete IT-environment and gain a deeper understanding of the underlying components and their part in a larger production chain.
 
-## Scope and Limitations
-* The scope is inteded to serve as an internship project and learning opportunity when it comes to working with containers, and to run applications on our virtual machines with redundance.
-* This guide is not intended for production-grade, multi-node clusters or advanced HA setups.
-* Hardware compatibility varies; If unsure, check <a href=>hardware requirements</a> before proceeding.
-* Instructions may become outdated as software updates; always verify with the official documentation.
-* Sensitive information will be withheld. This will not hinder participation in the guide.
-
 ## Method
 
 The solution was implemented using Ansible on a management virtual machine to automate the deployment of a container-based web application and monitoring on virtual on two machines running Podman. The container stack consisted of NGINX (frontend) that served visual presentation, Postgres (Database) for storing users and logging in, and Rocky linux based python api (Backend) as our backend api handling http requests and responses. To be able to serve multiple pages in the same window, a custom Cross-Origin-Resource-Sharing (CORS) function was created inside the backend api, since the inviroment is designed like most modern enterprises with restrictive access to the internet the containers couldn't be reliant on external python libraries and packages websites, instead a custom Rocky Linux based image was constructed using dnf as package handler, with access to internal package repositorys. The stack also consist of monitoring using container based Prometheus node exporters on each vm for exporting metrics configuring prometheus to collect metrics from the node exporters and prometheus as a data source for Grafana to visualize the result. Reusable Ansible roles and playbooks were used to install dependencies, pull images from a private image reg start containers with defined ports and volumes. To collect the container images from the private image registry, an ansible login role was composed and implemented with the mechanics of fetching confidential login credentials defined in the encrypted vault file in our ansible structure.
