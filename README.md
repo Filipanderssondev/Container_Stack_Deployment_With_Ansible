@@ -7,10 +7,14 @@
 
 <div>
   <img src="https://github.com/Filipanderssondev/Container_Stack_Deployment_With_Ansible/blob/main/Extra/container-stack-deployment.png" width="300" align="left" />
-
+  <h2>Abstract</h2>
   <p>
-    <strong>Container Stack Deployment With Ansible</strong>
+    Container stack application Deployment and monitoring on virtual machines running Podman, Managed by Ansible.<br>
 	<br>
+	<br>
+	<br>
+	<br>
+    <strong>Container Stack Deployment With Ansible</strong> <br>
     <strong>Authors:</strong>
     <i><a href="https://github.com/Filipanderssondev">Filip Andersson</a></i>
     and
@@ -20,10 +24,6 @@
     <br clear="left"/>
   </p>
 </div>
-
-## Abstract
-Container stack application Deployment and monitoring on virtual machines running Podman, Managed by Ansible.
-<br>
 
 ## Table of Contents
 
