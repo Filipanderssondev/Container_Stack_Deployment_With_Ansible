@@ -118,7 +118,7 @@ Great thanks once again to our mentor [Rafael](https://github.com/rafaelurrutias
 ## Implementation
 
 - Note, that some details cant be disclosed due to company policy and that i will speak in general terms. For example the registry i will pull images from i will call _"private-registry.com/repository"_
-<br
+<br>
 
 Every config file is available under the [code directory](https://github.com/Filipanderssondev/Container_Stack_Deployment_With_Ansible/tree/main/Code/ansible)
 
