@@ -79,7 +79,7 @@ Future improvements, refinements, or corrections may be introduced through contr
 ## Scope and Limitations
 * The scope is inteded to serve as an internship project and learning opportunity when it comes to working with containers, and to run applications on our virtual machines with redundance.
 * This guide is not intended for production-grade, multi-node clusters or advanced HA setups.
-* Hardware compatibility varies; If unsure, check <a href=>hardware requirements</a> before proceeding.
+* Hardware compatibility varies; If unsure, check hardware requirements before proceeding.
 * Instructions may become outdated as software updates; always verify with the official documentation.
 * Sensitive information will be withheld. This will not hinder participation in the guide.
 
