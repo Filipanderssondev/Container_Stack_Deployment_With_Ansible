@@ -9,7 +9,7 @@
   <img src="https://github.com/Filipanderssondev/Container_Stack_Deployment_With_Ansible/blob/main/Extra/container-stack-deployment.png" width="300" align="left" />
   <h2>Abstract</h2>
   <p>
-    Container stack application Deployment and monitoring on virtual machines running Podman, Managed by Ansible.<br>
+    This project demonstrates how to deploy a container-based fullstack web application within a virtual environment using Ansible and Podman. We'll make an application stack including NGINX, PostgreSQL, and a monitoring solution with Prometheus and Grafana. All components are automated through reusable Ansible roles. 
 	<br>
 	<br>
 	<br>
