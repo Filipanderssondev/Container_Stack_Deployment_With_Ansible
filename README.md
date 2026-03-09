@@ -678,6 +678,87 @@ INSERT INTO users (username, password) VALUES
 ON CONFLICT (username) DO NOTHING;
 ```
 
+### Deployment
+
+#### Application
+
+##### deploy_application.yaml
+~~~yaml
+---
+- name: Deploy application
+  hosts: application
+  become: true
+  roles:
+    - role: containers/install
+    - role: containers/login/filip
+
+  tasks:
+    - name: Run postgres
+      include_role:
+        name: containers/run
+      vars:
+        container_network: app_network
+        container_name: postgres_database
+        image_name: postgres
+        tag: latest
+        container_ports:
+          - "5433:5432"
+        container_volumes:
+          - "/home/Filip/app_projects/app-praktik-projekt/db:/docker-entrypoint-initdb.d:Z"
+        container_env_vars:
+          POSTGRES_USER: appuser
+          POSTGRES_PASSWORD: apppass
+          POSTGRES_DB: appdb
+        container_state: started
+        container_restart_policy: always
+
+    - name: Wait for postgres
+      wait_for:
+        host: localhost
+        port: 5433
+        delay: 3
+        timeout: 30
+
+    - name: Run backend
+      include_role:
+        name: containers/run
+      vars:
+        container_network: app_network
+        container_name: rocky_flask_backend_api
+        image_name: rocky_flask_backend
+        tag: latest
+        container_ports:
+          - "5000:5000"
+        container_env_vars:
+          DB_HOST: postgres_database
+          DB_USER: appuser
+          DB_PASSWORD: apppass
+          DB_NAME: appdb
+        container_state: started
+        container_restart_policy: always
+
+    - name: Run frontend
+      include_role:
+        name: containers/run
+      vars:
+        container_network: app_network
+        container_name: nginx_frontend
+        image_name: nginx
+        tag: 1.29.4
+        container_ports:
+          - "8081:80"
+        container_volumes:
+          - "/home/Filip/app_projects/app-praktik-projekt/frontend:/usr/share/nginx/html:Z"
+        container_cmd:
+          - "sh"
+          - "-c"
+          - "chown -R 0:0 /usr/share/nginx/html && nginx -g 'daemon off;'"
+        container_env_vars: {}
+        container_state: started
+        container_restart_policy: always
+~~~
+
+#### Deploy_monitoring.yaml
 
 ## Conclusion
 Slutsats
