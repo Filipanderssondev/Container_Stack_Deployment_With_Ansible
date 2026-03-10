@@ -40,6 +40,7 @@
         10.1 [Configuring reusable roles](#configuring-reusable-roles) <br>
     	10.2 [The stack](#the-stack) <br>
 		10.3 [Backend and DB](#backend-and-db) <br>
+		10.4 [Deployment](#deployment) <br>
 11. [Conclusion](#conclusion)
 12. [References](#references) <br>
     12.1 [Other projects in our virtual IT-enviroment](#other-projects-in-our-virtual-it-enviroment)
