@@ -1,0 +1,76 @@
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-family: 'Segoe UI', sans-serif;
+  color: white;
+
+  background: radial-gradient(circle at top left, #1f1f1f, #000000);
+  animation: fadeIn 1.2s ease-in;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  padding: 50px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 0 40px rgba(255,255,255,0.1);
+  width: 400px;
+}
+
+h1 {
+  font-size: 3rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  opacity: 0.6;
+  margin-bottom: 30px;
+}
+
+input {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 20px;
+  border: none;
+  border-radius: 8px;
+  background: #111;
+  color: white;
+  font-size: 1rem;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1rem;
+  background: white;
+  color: black;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #00ffcc;
+  box-shadow: 0 0 20px #00ffcc;
+  transform: translateY(-2px);
+}
+
+.diagram {
+  max-width: 100%;
+  margin: 20px 0;
+  border-radius: 10px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
