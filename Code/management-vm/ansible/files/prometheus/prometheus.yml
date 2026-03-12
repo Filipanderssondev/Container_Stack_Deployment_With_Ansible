@@ -1,0 +1,18 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: "Management Containers"
+    static_configs:
+      - targets: ["10.208.12.100:9882"]
+        labels: {role: "Management"}
+
+  - job_name: "Application Containers"
+    static_configs:
+      - targets: ["10.208.12.103:9882"]
+        labels: {role: "Application"}
+
+  - job_name: "Monitoring Containers"
+    static_configs:
+      - targets: ["10.208.12.102:9882"]
+        labels: {role: "Monitoring"}
