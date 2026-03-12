@@ -1,3 +1,4 @@
+~~~yaml
 ansible
 ├── ansible.cfg
 ├── files
@@ -62,3 +63,4 @@ ansible
             │   └── main.yaml
             └── tasks
                 └── main.yaml
+~~~
