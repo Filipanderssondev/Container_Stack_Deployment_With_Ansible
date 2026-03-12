@@ -914,7 +914,9 @@ ON CONFLICT (username) DO NOTHING;
 
 
 ## Conclusion
-Slutsats
+Working on this project as interns gave us a practical look at how modern infrastructure is actually built and maintained. Instead of only working with isolated tools, we had to understand how containers, automation, and monitoring fit together in a real environment. Designing solutions within the constraints of an enterprise setup—such as internal repositories and restricted internet access—also made the work feel closer to real production scenarios.
+
+Beyond the technical result, the project helped us gain confidence in structuring infrastructure through automation and reproducible deployments. Seeing the application stack and monitoring come together across multiple virtual machines was both challenging and rewarding, and it gave us a clearer understanding of the systems that support real-world IT operations.
 
 ## References
 - [Dockerhub (public image repository](https://hub.docker.com/)
