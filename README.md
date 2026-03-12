@@ -100,13 +100,14 @@ Future improvements, refinements, or corrections may be introduced through contr
  - python3-flask
  - python3-psycopg2
  - python3-dotenv
+ - python3-itsdangerous
 
 ### Images
  _creator(if)/image-name:verison_tag_
  - custom built image (rocky_flask_backend:latest)
  - rocky linux (rockylinux:10-ubi-init)
  - postgres (postgres:latest)
- - cadvisor (google/cadvisor:latest)
+ - custom prometheus podman exporter (prometheus-podman-exporter:latest)
  - node-exporter (prom/node-exporter:latest)
  - Prometheus (prom/prometheus:main)
  - grafana (grafana:alpine-3.22.2)
