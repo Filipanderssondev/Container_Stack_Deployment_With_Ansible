@@ -113,6 +113,8 @@ Future improvements, refinements, or corrections may be introduced through contr
  - grafana (grafana:alpine-3.22.2)
  - nginx (nginx:1.29.4)
 
+### Binaries
+ - mkcert-v1.4.4-linux-amd64 ([link](https://github.com/FiloSottile/mkcert/releases))
 
 ## Acknowledgments
 Great thanks once again to our mentor [Rafael](https://github.com/rafaelurrutiasilva) for ongoing support and guidance. And thanks to [Victor](https://github.com/ludd98) for insight and guidance. 
@@ -912,6 +914,102 @@ ON CONFLICT (username) DO NOTHING;
         container_network: host
 ~~~
 
+### HTTPS / TLS Configuration
+
+To remove the insecure connection warning in Firefox on the Showcase VM, we configured
+TLS for both the frontend (Nginx) and backend (Flask) using mkcert-generated certificates.
+
+#### 1. Generate certificates (on Showcase-01)
+
+Using the mkcert binary on Showcase-01:
+```bash
+./mkcert-v1.4.4-linux-amd64 
+```
+
+This generates two files:
+- `<IP>.pem` — the server certificate
+- `<IP>-key.pem` — the private key
+
+The rootCA is stored at:
+```bash
+./mkcert-v1.4.4-linux-amd64 -CAROOT
+# /home/Filip/.local/share/mkcert/rootCA.pem
+```
+
+#### 2. Store certs on Management-01
+
+Certs are stored under Ansible files on Mgmt-01:
+```
+/opt/ansible/files/certificates/app-01-certs/
+```
+
+#### 3. Nginx config
+
+An Nginx config file is stored at `/opt/ansible/files/nginx/nginx.conf` and copied
+to App-01 automatically by the playbook:
+```nginx
+server {
+    listen 443 ssl;
+    ssl_certificate     /certs/.pem;
+    ssl_certificate_key /certs/-key.pem;
+    root /usr/share/nginx/html;
+    index index.html;
+}
+```
+
+#### 4. Playbook automation
+
+The deploy_app playbook handles everything automatically:
+```yaml
+- name: Ensure certs directory exists
+  file:
+    path: /home/Filip/certs
+    state: directory
+
+- name: Copy certs to app-01
+  copy:
+    src: /opt/ansible/files/certificates/app-01-certs/
+    dest: /home/Filip/certs/
+
+- name: Copy nginx config
+  copy:
+    src: /opt/ansible/files/nginx/nginx.conf
+    dest: /home/Filip/app_projects/app-praktik-projekt/nginx.conf
+```
+
+Frontend container mounts:
+```yaml
+container_ports:
+  - "443:443"
+container_volumes:
+  - "/home/Filip/app_projects/app-praktik-projekt/frontend:/usr/share/nginx/html:Z"
+  - "/home/Filip/certs:/certs:Z"
+  - "/home/Filip/app_projects/app-praktik-projekt/nginx.conf:/etc/nginx/conf.d/default.conf:Z"
+```
+
+Backend container mounts:
+```yaml
+container_volumes:
+  - "/home/Filip/certs:/certs:Z"
+```
+
+#### 5. Flask HTTPS (app.py)
+```python
+app.run(host="0.0.0.0", port=5000, ssl_context=(
+    "/certs/.pem",
+    "/certs/-key.pem"
+))
+```
+
+#### 6. Trust the certificate in Firefox (Showcase-01)
+
+Import the rootCA into Firefox once so it permanently trusts all mkcert-generated certs:
+
+Firefox → Settings → Privacy & Security → Certificates → View Certificates → Authorities → Import
+
+Import: `/home/Filip/.local/share/mkcert/rootCA.pem`
+
+Check **"Trust this CA to identify websites"**
 
 ## Conclusion
 Working on this project as interns gave us a practical look at how modern infrastructure is actually built and maintained. Instead of only working with isolated tools, we had to understand how containers, automation, and monitoring fit together in a real environment. Designing solutions within the constraints of an enterprise setup—such as internal repositories and restricted internet access—also made the work feel closer to real production scenarios.
